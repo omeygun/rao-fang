@@ -7,6 +7,8 @@ import { TopBar } from '../components/TopBar';
 import { speakTextThai } from '../audio/speak';
 import { NO_VOICE_TH } from '../components/Speak';
 import { go } from '../nav';
+import { ChevronRight } from 'lucide-react';
+import { haptic, toast } from '../components/ui';
 
 const TEACH_CONSENT = 'teach-v1';
 const HELPER_CONSENT = 'helper-minor-v1';
@@ -49,13 +51,36 @@ export function Teach({ route }: { route: string }) {
   return (
     <main className="screen">
       <TopBar title="สอนภาษาเมือง" />
-      <nav className="big-buttons">
-        <a className="big" href="#/teach/word">🔤<span>สอนคำ</span></a>
-        <a className="big" href="#/teach/swap">🔁<span>เปลี่ยนคำในประโยค</span></a>
-        <a className="big" href="#/teach/helper">👧<span>ลูกช่วยแปล</span></a>
-        <a className="big" href="#/teach/dict">📖<span>พจนานุกรมของฉัน</span></a>
+      <TeachProgress />
+      <nav className="big-buttons stagger">
+        <a className="big hero" href="#/teach/word"><span className="tile">🔤</span><span className="grow">สอนคำ<small>ดูรูปกับคำไทย แล้วพิมพ์เป็นคำเมือง</small></span><ChevronRight aria-hidden /></a>
+        <a className="big" href="#/teach/swap"><span className="tile">🔁</span><span className="grow">เปลี่ยนคำในประโยค<small>เปลี่ยนคำที่ไฮไลต์เป็นคำเมือง</small></span><ChevronRight aria-hidden /></a>
+        <a className="big" href="#/teach/helper"><span className="tile">👧</span><span className="grow">ลูกช่วยแปล<small>แม่พิมพ์คำเมือง ลูกพิมพ์ภาษาไทย</small></span><ChevronRight aria-hidden /></a>
+        <a className="big" href="#/teach/dict"><span className="tile">📖</span><span className="grow">พจนานุกรมของฉัน<small>ดู แก้ หรือลบคำที่สอนไว้</small></span><ChevronRight aria-hidden /></a>
       </nav>
     </main>
+  );
+}
+
+/** How many of the starter words Noor has taught, plus total dictionary size. */
+function TeachProgress() {
+  const [p, setP] = useState<{ taught: number; total: number } | null>(null);
+  useEffect(() => {
+    (async () => {
+      const dict = await (await db()).getAll('km_dictionary');
+      const th = new Set(dict.map((e) => e.th));
+      setP({ taught: (teachWords as { th: string }[]).filter((w) => th.has(w.th)).length, total: dict.length });
+    })();
+  }, []);
+  if (!p) return null;
+  const pct = Math.round((100 * p.taught) / teachWords.length);
+  return (
+    <section className="card reveal">
+      <div className="card-head"><span className="tile">🌱</span><h2>ความคืบหน้า</h2><b>{pct}%</b></div>
+      <p className="sentence">สอนแล้ว {p.taught}/{teachWords.length} คำ</p>
+      <div className="progress" aria-hidden><i style={{ width: `${pct}%` }} /></div>
+      <p className="muted small">ในพจนานุกรมทั้งหมด {p.total} คำ · ยิ่งสอนมาก แอปยิ่งเข้าใจบันทึกของคุณ</p>
+    </section>
   );
 }
 
@@ -87,6 +112,8 @@ function WordMode({ q }: { q: URLSearchParams }) {
     await (await db()).put('km_pairs', { id: uid(), mode: 'word', km: km.trim(), th: thai.trim(), audio: audio ?? undefined, at: Date.now() });
     await addToDict(km, thai, 'word');
     setSaved(saved + 1);
+    haptic(18);
+    toast(`บันทึกแล้ว ✓ ${km.trim()} = ${thai.trim()}`);
     setAudio(null);
     if (prefillKm) {
       go(ret ?? '/teach');
@@ -108,7 +135,9 @@ function WordMode({ q }: { q: URLSearchParams }) {
         </>
       ) : (
         <>
-          <p className="word-card"><span className="icon">{w.icon}</span> {w.th}</p>
+          <div className="progress" aria-hidden><i style={{ width: `${(100 * (i % teachWords.length)) / teachWords.length}%` }} /></div>
+          <p className="muted small">คำที่ {(i % teachWords.length) + 1}/{teachWords.length}</p>
+          <p className="word-card" key={i}><span className="icon">{w.icon}</span> {w.th}</p>
           <p>คำนี้ภาษาเมืองเขียนว่าอะไร?</p>
           <input value={km} autoFocus placeholder="พิมพ์คำเมือง" onChange={(e) => setKm(e.target.value)} />
         </>

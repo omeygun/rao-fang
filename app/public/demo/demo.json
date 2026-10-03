@@ -1,0 +1,521 @@
+{
+ "note": "Sample data for the app's \"Try the demo\" button → app/public/demo/demo.json.",
+ "headsVersion": "20261003-2157-n1557",
+ "visits": [
+  {
+   "daysAgo": 0,
+   "lang": "en",
+   "text": "Picking the cherries ourselves was SO much fun!! Loved every minute of it!",
+   "sourceId": "syn-en-0000-03",
+   "ratings": [
+    {
+     "stepId": "walk",
+     "aspect": "walk_trail",
+     "value": "up"
+    },
+    {
+     "stepId": "picking",
+     "aspect": "coffee_picking",
+     "value": "up"
+    },
+    {
+     "stepId": "processing",
+     "aspect": "processing_roasting",
+     "value": "up"
+    },
+    {
+     "stepId": "tasting",
+     "aspect": "tasting",
+     "value": "down"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "coffee_picking",
+      "p": 0.896,
+      "sentiment": "positive"
+     }
+    ],
+    "suggestionP": 0.117,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 1,
+   "lang": "ko",
+   "text": "경치는 아쉬웠지만 인원이 적어 좋았어요.",
+   "sourceId": "bal-ko-0014-08",
+   "ratings": [
+    {
+     "stepId": "walk",
+     "aspect": "walk_trail",
+     "value": "up"
+    },
+    {
+     "stepId": "picking",
+     "aspect": "coffee_picking",
+     "value": "up"
+    },
+    {
+     "stepId": "processing",
+     "aspect": "processing_roasting",
+     "value": "down"
+    },
+    {
+     "stepId": "host",
+     "aspect": "host_hospitality",
+     "value": "up"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "group_size_timing",
+      "p": 0.778,
+      "sentiment": "positive"
+     }
+    ],
+    "suggestionP": 0.356,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 1,
+   "lang": "ko",
+   "text": "원두를 조금 구입할 수 있을까요?",
+   "sourceId": "syn-ko-0029-09",
+   "ratings": [
+    {
+     "stepId": "walk",
+     "aspect": "walk_trail",
+     "value": "up"
+    },
+    {
+     "stepId": "picking",
+     "aspect": "coffee_picking",
+     "value": "up"
+    },
+    {
+     "stepId": "tasting",
+     "aspect": "tasting",
+     "value": "up"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "purchase_interest",
+      "p": 0.954,
+      "sentiment": "positive"
+     }
+    ],
+    "suggestionP": 0.239,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 2,
+   "lang": "zh",
+   "text": "风景很美，只是雾稍大。",
+   "sourceId": "syn-zh-0015-09",
+   "ratings": [
+    {
+     "stepId": "walk",
+     "aspect": "walk_trail",
+     "value": "up"
+    },
+    {
+     "stepId": "picking",
+     "aspect": "coffee_picking",
+     "value": "up"
+    },
+    {
+     "stepId": "processing",
+     "aspect": "processing_roasting",
+     "value": "down"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "scenery",
+      "p": 0.87,
+      "sentiment": "mixed"
+     }
+    ],
+    "suggestionP": 0.119,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 3,
+   "lang": "ko",
+   "text": "어머님께서 해주신 점심 정말 맛있었습니다.",
+   "sourceId": "syn-ko-0042-08",
+   "ratings": [
+    {
+     "stepId": "walk",
+     "aspect": "walk_trail",
+     "value": "up"
+    },
+    {
+     "stepId": "picking",
+     "aspect": "coffee_picking",
+     "value": "down"
+    },
+    {
+     "stepId": "processing",
+     "aspect": "processing_roasting",
+     "value": "down"
+    },
+    {
+     "stepId": "tasting",
+     "aspect": "tasting",
+     "value": "up"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "food",
+      "p": 0.883,
+      "sentiment": "positive"
+     }
+    ],
+    "suggestionP": 0.12,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 4,
+   "lang": "zh",
+   "text": "说实话，找过来太难了。导航把我们带到另一条土路上，绕了快四十分钟，问了两个村民才找到。最后一段路又窄又陡，租的小车差点上不去，要是下雨肯定更危险。路口也没有任何牌子，来之前也没人提醒我们这些，体验直接打了折扣。",
+   "sourceId": "syn-zh-0019-08",
+   "ratings": [],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "logistics_directions",
+      "p": 0.832,
+      "sentiment": "negative"
+     }
+    ],
+    "suggestionP": 0.578,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 5,
+   "lang": "zh",
+   "text": "咖啡很好喝，谢谢款待。不过山路有点陡，走得比较吃力。",
+   "sourceId": "syn-zh-0041-00",
+   "ratings": [
+    {
+     "stepId": "walk",
+     "aspect": "walk_trail",
+     "value": "up"
+    },
+    {
+     "stepId": "picking",
+     "aspect": "coffee_picking",
+     "value": "up"
+    },
+    {
+     "stepId": "processing",
+     "aspect": "processing_roasting",
+     "value": "up"
+    },
+    {
+     "stepId": "tasting",
+     "aspect": "tasting",
+     "value": "up"
+    },
+    {
+     "stepId": "host",
+     "aspect": "host_hospitality",
+     "value": "up"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "tasting",
+      "p": 0.804,
+      "sentiment": "positive"
+     },
+     {
+      "aspect": "walk_trail",
+      "p": 0.792,
+      "sentiment": "mixed"
+     }
+    ],
+    "suggestionP": 0.319,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 6,
+   "lang": "zh",
+   "text": "说真的烘焙那个环节有点水，就站旁边看了几分钟，锅里的豆子也没让我们碰，晒豆子那边也就扫了一眼，感觉挺敷衍的哈。",
+   "sourceId": "bal-zh-0012-09",
+   "ratings": [
+    {
+     "stepId": "picking",
+     "aspect": "coffee_picking",
+     "value": "down"
+    },
+    {
+     "stepId": "host",
+     "aspect": "host_hospitality",
+     "value": "up"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "processing_roasting",
+      "p": 0.687,
+      "sentiment": "mixed"
+     }
+    ],
+    "suggestionP": 0.414,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 9,
+   "lang": "ko",
+   "text": "사장님 설명 하나도 못 알아들었어요 😂 번역기 들고 서로 눈빛 교환만 열심히 했네요 🤷‍♀️☕",
+   "sourceId": "bal-ko-0000-09",
+   "ratings": [
+    {
+     "stepId": "walk",
+     "aspect": "walk_trail",
+     "value": "up"
+    },
+    {
+     "stepId": "picking",
+     "aspect": "coffee_picking",
+     "value": "up"
+    },
+    {
+     "stepId": "host",
+     "aspect": "host_hospitality",
+     "value": "up"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "guide_communication",
+      "p": 0.795,
+      "sentiment": "negative"
+     }
+    ],
+    "suggestionP": 0.399,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 12,
+   "lang": "zh",
+   "text": "人太多了挤得慌，不过主人家超热情的哈哈",
+   "sourceId": "bal-zh-0011-06",
+   "ratings": [
+    {
+     "stepId": "picking",
+     "aspect": "coffee_picking",
+     "value": "up"
+    },
+    {
+     "stepId": "host",
+     "aspect": "host_hospitality",
+     "value": "up"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "host_hospitality",
+      "p": 0.839,
+      "sentiment": "positive"
+     }
+    ],
+    "suggestionP": 0.208,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 16,
+   "lang": "zh",
+   "text": "风景一般，价格倒很便宜。",
+   "sourceId": "bal-zh-0006-09",
+   "ratings": [
+    {
+     "stepId": "picking",
+     "aspect": "coffee_picking",
+     "value": "up"
+    },
+    {
+     "stepId": "tasting",
+     "aspect": "tasting",
+     "value": "down"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "price_value",
+      "p": 0.906,
+      "sentiment": "negative"
+     },
+     {
+      "aspect": "scenery",
+      "p": 0.717,
+      "sentiment": "negative"
+     }
+    ],
+    "suggestionP": 0.199,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 20,
+   "lang": "zh",
+   "text": "豆子在哪买？我要！",
+   "sourceId": "syn-zh-0001-06",
+   "ratings": [
+    {
+     "stepId": "walk",
+     "aspect": "walk_trail",
+     "value": "up"
+    },
+    {
+     "stepId": "tasting",
+     "aspect": "tasting",
+     "value": "up"
+    },
+    {
+     "stepId": "host",
+     "aspect": "host_hospitality",
+     "value": "down"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "purchase_interest",
+      "p": 0.941,
+      "sentiment": "positive"
+     },
+     {
+      "aspect": "other",
+      "p": 0.76,
+      "sentiment": "positive"
+     }
+    ],
+    "suggestionP": 0.265,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": false,
+   "unsureReasons": []
+  },
+  {
+   "daysAgo": 2,
+   "lang": "ko",
+   "text": "아 진짜 피곤하다... 픽업 차가 40분이나 늦게 와서 시작부터 지쳤어요 ㅡㅡ 그래도 커피는 맛잇었음. 근데 오르막 넘 길어서 다리 후덜덜함 담엔 안걸을래요",
+   "sourceId": "syn-ko-0019-06",
+   "ratings": [
+    {
+     "stepId": "walk",
+     "aspect": "walk_trail",
+     "value": "down"
+    },
+    {
+     "stepId": "processing",
+     "aspect": "processing_roasting",
+     "value": "down"
+    }
+   ],
+   "model": {
+    "aspects": [
+     {
+      "aspect": "logistics_directions",
+      "p": 0.739,
+      "sentiment": "negative"
+     },
+     {
+      "aspect": "walk_trail",
+      "p": 0.658,
+      "sentiment": "negative"
+     },
+     {
+      "aspect": "tasting",
+      "p": 0.637
+     }
+    ],
+    "suggestionP": 0.641,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": true,
+   "unsureReasons": [
+    "borderline"
+   ]
+  },
+  {
+   "daysAgo": 5,
+   "lang": "zh",
+   "text": "今天打卡成功✌️😆",
+   "sourceId": "syn-zh-0009-07",
+   "ratings": [
+    {
+     "stepId": "walk",
+     "aspect": "walk_trail",
+     "value": "up"
+    },
+    {
+     "stepId": "picking",
+     "aspect": "coffee_picking",
+     "value": "up"
+    },
+    {
+     "stepId": "host",
+     "aspect": "host_hospitality",
+     "value": "down"
+    }
+   ],
+   "model": {
+    "aspects": [],
+    "suggestionP": 0.285,
+    "headsVersion": "20261003-2157-n1557"
+   },
+   "unsure": true,
+   "unsureReasons": [
+    "no_aspect"
+   ]
+  }
+ ]
+}

@@ -16,6 +16,8 @@ export interface VisitRec {
   at: number;
   lang: GuestLang;
   consentId: string;
+  /** Sample data from "Try the demo"; shown with a banner and deletable in one tap. */
+  demo?: boolean;
 }
 export interface RatingRec {
   id: string;

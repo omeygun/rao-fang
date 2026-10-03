@@ -6,6 +6,19 @@ Noor reviews Thai insights built from counts, fixed templates and real quotes, w
 (Northern Thai) enters through Teach Mode and a personal dictionary that normalises Noor's notes to Central Thai.
 Spec: [`spec.md`](spec.md).
 
+## Screenshots
+
+| Landing (browser) | Home | Insights | Evidence sheet |
+|---|---|---|---|
+| ![](docs/screenshots/landing.png) | ![](docs/screenshots/home.png) | ![](docs/screenshots/insights.png) | ![](docs/screenshots/sheet.png) |
+
+Guest flow (language → consent → swipe ratings → voice → thanks):
+![](docs/screenshots/guest-flow.png)
+
+Captured in headless Chrome emulating a Pixel 7. Insights shows the built-in **sample data** (real model outputs on
+held-out synthetic items); tour photos are placeholder illustrations. UI: IBM Plex Sans Thai (bundled, 64 KB), Lucide
+icons, View Transitions; axe-core reports 0 accessibility violations on all main screens.
+
 ## Status — what is done and what is not
 
 | Part | Status |

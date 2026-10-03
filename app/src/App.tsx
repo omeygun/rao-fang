@@ -7,8 +7,12 @@ import { Teach } from './screens/Teach';
 import { Settings } from './screens/Settings';
 import { DevBenchmark } from './screens/DevBenchmark';
 import { DevParity } from './screens/DevParity';
+import { Landing } from './screens/Landing';
 import { PinGate } from './components/PinGate';
+import { BottomNav, ToastHost } from './components/ui';
 import { processPending } from './ml/process';
+
+const installed = () => matchMedia('(display-mode: standalone)').matches;
 
 export function App() {
   const route = useRoute();
@@ -21,7 +25,9 @@ export function App() {
     if (route.startsWith('/guest')) setUnlocked(false);
   }, [route]);
 
-  if (route.startsWith('/guest')) return <Guest />;
+  // First visit in a browser tab (no hash) shows the English landing page; the installed app opens straight to Home.
+  if (route === '/landing' || (!location.hash && !installed())) return <><Landing /><ToastHost /></>;
+  if (route.startsWith('/guest')) return <><Guest /><ToastHost /></>;
   // Noor's screens sit behind the optional PIN (spec §10).
   const noor = (() => {
     if (route.startsWith('/insights')) return <Insights />;
@@ -31,5 +37,11 @@ export function App() {
     if (route.startsWith('/dev/parity')) return <DevParity />;
     return <Home />;
   })();
-  return unlocked ? noor : <PinGate onUnlock={() => setUnlocked(true)}>{noor}</PinGate>;
+  return (
+    <>
+      {unlocked ? noor : <PinGate onUnlock={() => setUnlocked(true)}>{noor}</PinGate>}
+      {unlocked && <BottomNav route={route} />}
+      <ToastHost />
+    </>
+  );
 }

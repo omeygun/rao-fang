@@ -1,1 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="96" fill="#5b3a1e"/><ellipse cx="256" cy="256" rx="120" ry="160" fill="#c0392b" transform="rotate(-25 256 256)"/><path d="M200 130 C 300 220, 220 300, 310 390" stroke="#5b3a1e" stroke-width="18" fill="none" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7a4f2a"/><stop offset="1" stop-color="#4a2d14"/></linearGradient>
+    <radialGradient id="cherry" cx=".38" cy=".34" r=".75"><stop offset="0" stop-color="#e8574a"/><stop offset=".7" stop-color="#c0392b"/><stop offset="1" stop-color="#8e2219"/></radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- sound waves: "we listen" -->
+  <path d="M352 176a120 120 0 0 1 0 160" fill="none" stroke="#f6e7d2" stroke-width="22" stroke-linecap="round" opacity=".9"/>
+  <path d="M398 132a184 184 0 0 1 0 248" fill="none" stroke="#f6e7d2" stroke-width="22" stroke-linecap="round" opacity=".5"/>
+  <!-- coffee cherry -->
+  <circle cx="220" cy="270" r="112" fill="url(#cherry)"/>
+  <path d="M176 220c22 22 22 78 0 104" fill="none" stroke="#7a1d14" stroke-width="12" stroke-linecap="round" opacity=".55"/>
+  <ellipse cx="186" cy="226" rx="26" ry="16" fill="#fff" opacity=".35" transform="rotate(-30 186 226)"/>
+  <!-- stem + leaf -->
+  <path d="M222 160c4-30 22-52 52-62" fill="none" stroke="#3f6b2a" stroke-width="14" stroke-linecap="round"/>
+  <path d="M262 104c34-26 82-22 102-6-22 26-66 34-102 6z" fill="#5c9a3b"/>
+</svg>

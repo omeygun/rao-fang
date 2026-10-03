@@ -20,13 +20,14 @@ export default defineConfig({
         description: 'Offline visitor feedback for a farm-tour host',
         lang: 'th',
         theme_color: '#5b3a1e',
-        background_color: '#fdf8f0',
+        background_color: '#fbf6ee',
         display: 'standalone',
         start_url: '/',
         icons: [
           { src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {
