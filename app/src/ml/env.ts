@@ -3,8 +3,10 @@
 import { env } from '@huggingface/transformers';
 
 export const MODELS = {
-  asr: 'Xenova/whisper-base',
-  asrFallback: 'Xenova/whisper-tiny',
+  // Default ASR is whisper-tiny: in the Phase 0 emulation, base pushed the core bundle over 200 MB
+  // and took > 10 s for 11 s of audio at 4x CPU throttle (docs/benchmarks.md). Base stays selectable.
+  asrTiny: 'Xenova/whisper-tiny',
+  asrBase: 'Xenova/whisper-base',
   embed: 'Xenova/multilingual-e5-small',
   translate: 'Xenova/nllb-200-distilled-600M',
 } as const;
@@ -18,6 +20,8 @@ export function configureEnv() {
   configured = true;
   env.allowLocalModels = false;
   env.useBrowserCache = true;
+  // The service worker already precaches /ort/*; transformers.js would store a second 25.7 MB copy.
+  env.useWasmCache = false;
   const wasm = env.backends.onnx.wasm!;
   wasm.wasmPaths = {
     mjs: '/ort/ort-wasm-simd-threaded.asyncify.mjs',

@@ -6,9 +6,9 @@ import { configureEnv, MODELS, pickDevice, type Progress } from './env';
 
 const WHISPER_LANG: Record<GuestLang, string> = { en: 'english', zh: 'chinese', ko: 'korean' };
 
-export type AsrModel = typeof MODELS.asr | typeof MODELS.asrFallback;
+export type AsrModel = typeof MODELS.asrTiny | typeof MODELS.asrBase;
 export function asrModel(): AsrModel {
-  return (localStorage.getItem('raofang.asrModel') as AsrModel) || MODELS.asr;
+  return (localStorage.getItem('raofang.asrModel') as AsrModel) || MODELS.asrTiny;
 }
 
 let asr: { id: string; p: Promise<AutomaticSpeechRecognitionPipeline> } | null = null;

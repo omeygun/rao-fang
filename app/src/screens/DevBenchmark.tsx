@@ -117,8 +117,8 @@ export function DevBenchmark() {
       <h3>1. Load models (online first time)</h3>
       <div className="row">
         <button onClick={() => time('load e5-small q8', async () => { await loadEmbedder(prog); requestPersist(); return MODELS.embed; })}>Load e5</button>
-        <button onClick={() => time('load whisper-base q8', async () => { await loadAsr(prog, MODELS.asr); return MODELS.asr; })}>Load whisper-base</button>
-        <button onClick={() => time('load whisper-tiny q8', async () => { await loadAsr(prog, MODELS.asrFallback); return MODELS.asrFallback; })}>Load whisper-tiny</button>
+        <button onClick={() => time('load whisper-base q8', async () => { await loadAsr(prog, MODELS.asrBase); return MODELS.asrBase; })}>Load whisper-base</button>
+        <button onClick={() => time('load whisper-tiny q8', async () => { await loadAsr(prog, MODELS.asrTiny); return MODELS.asrTiny; })}>Load whisper-tiny</button>
         <button onClick={() => time('load NLLB q8 (pack)', async () => { await installPack(prog); return MODELS.translate; })}>Load NLLB (big!)</button>
       </div>
 
@@ -130,8 +130,8 @@ export function DevBenchmark() {
         {audio && <span className="small">audio: {(audio.length / 16000).toFixed(1)} s</span>}
       </div>
       <div className="row">
-        <button disabled={!audio} onClick={() => time(`whisper-base: ${(audio!.length / 16000).toFixed(1)} s audio`, async () => { await loadAsr(undefined, MODELS.asr); return '→ ' + (await transcribe(audio!, 'en', MODELS.asr)); })}>Whisper base</button>
-        <button disabled={!audio} onClick={() => time(`whisper-tiny: ${(audio!.length / 16000).toFixed(1)} s audio`, async () => { await loadAsr(undefined, MODELS.asrFallback); return '→ ' + (await transcribe(audio!, 'en', MODELS.asrFallback)); })}>Whisper tiny</button>
+        <button disabled={!audio} onClick={() => time(`whisper-base: ${(audio!.length / 16000).toFixed(1)} s audio`, async () => { await loadAsr(undefined, MODELS.asrBase); return '→ ' + (await transcribe(audio!, 'en', MODELS.asrBase)); })}>Whisper base</button>
+        <button disabled={!audio} onClick={() => time(`whisper-tiny: ${(audio!.length / 16000).toFixed(1)} s audio`, async () => { await loadAsr(undefined, MODELS.asrTiny); return '→ ' + (await transcribe(audio!, 'en', MODELS.asrTiny)); })}>Whisper tiny</button>
         <button onClick={() => time('e5-small: embed 30 words (warm)', async () => { await embedPrefixed([e5Input('warm up')]); const t = performance.now(); const [v] = await embedPrefixed([e5Input(SENTENCE_30)]); return `dim ${v.length}, inner ${(performance.now() - t).toFixed(0)} ms`; })}>e5 embed</button>
         <button onClick={() => time('NLLB: 30 words en→th', async () => (await translateToThai(SENTENCE_30, 'en')) ?? 'pack not installed')}>NLLB translate</button>
       </div>

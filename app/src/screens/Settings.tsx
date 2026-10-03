@@ -72,8 +72,8 @@ export function Settings() {
         <p className="small">ตัวจำแนก (heads.json): {heads ? '✅ ' + heads : '❌ ยังไม่มี — ความเห็นทั้งหมดจะไปอยู่ในคิว “ไม่แน่ใจ”'}</p>
         <label className="row small">เสียงเป็นข้อความ:
           <select value={asr} onChange={(e) => { localStorage.setItem('raofang.asrModel', e.target.value); setAsr(e.target.value as any); }}>
-            <option value={MODELS.asr}>whisper-base</option>
-            <option value={MODELS.asrFallback}>whisper-tiny (เล็กกว่า)</option>
+            <option value={MODELS.asrTiny}>whisper-tiny (เล็ก เร็ว)</option>
+            <option value={MODELS.asrBase}>whisper-base (ใหญ่กว่า ช้ากว่า)</option>
           </select>
         </label>
         <button className="primary" disabled={!!busy} onClick={() => run('core', async () => {

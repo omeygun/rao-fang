@@ -12,7 +12,7 @@ Spec: [`spec.md`](spec.md).
 |---|---|
 | PWA: Guest Mode, Insights, not-sure queue + manual tags, Teach Mode (word / sentence swap / helper), notes with Kham Mueang normalisation, Settings, PIN, export, delete | ✅ built, typechecks, unit tests pass, flows smoke-tested in headless Chromium (without models) |
 | COOP/COEP headers (`vercel.json`, `public/_headers`), same-origin ONNX runtime, service-worker precache | ✅ `crossOriginIsolated === true` under `vite preview` |
-| DevBenchmark / DevParity pages | ✅ built — **not run on a phone yet** |
+| DevBenchmark / DevParity pages | ✅ built; run in emulated Chrome (Pixel 7, offline, 4× CPU throttle) — see `docs/benchmarks.md`. **Not run on a real phone yet** |
 | ML pipeline (`ml/`): teacher, student, export, eval, km_eval, FLORES | ✅ code done; smoke-tested end-to-end with a fake embedder on throwaway fixtures |
 | `synthetic.jsonl` (1,242 items) and trained `heads.json` (61 KB) | ✅ generated with `claude-opus-5-5`, trained in 7.5 min on CPU; synthetic-dev micro-F1 0.665, 54% auto-classified at 95% precision (`docs/eval.md`) |
 | Phase 0 numbers, model sizes | ❌ TODO on the phone (`docs/benchmarks.md`) |
@@ -43,7 +43,7 @@ fetches are allowed — **verify on the phone**; if anything is blocked, switch 
 ## Offline install on the phone
 
 1. Open the HTTPS URL in Chrome on the Android phone → menu → *Install app* / *Add to Home screen*.
-2. Open from the home screen → ⚙️ → *ดาวน์โหลด / ตรวจสอบโมเดลหลัก* (Whisper + e5, on Wi-Fi). Optional: *ดาวน์โหลดชุดแปลภาษา* (NLLB, large).
+2. Open from the home screen → ⚙️ → *ดาวน์โหลด / ตรวจสอบโมเดลหลัก* (whisper-tiny + e5, ~197 MB, on Wi-Fi). Optional: *ดาวน์โหลดชุดแปลภาษา* (NLLB, large).
 3. Check the home chip shows ✅ and Settings shows persistent storage granted (installing to home screen helps).
 4. Airplane mode on → everything (guest → insights → not-sure → teach → notes) keeps working.
 
@@ -51,7 +51,7 @@ fetches are allowed — **verify on the phone**; if anything is blocked, switch 
 
 | Bundle | Contents | Measured size |
 |---|---|---|
-| Core (target ≤ 200 MB) | app shell + ONNX runtime + Whisper q8 + e5-small q8 + heads.json + Thai clips | **TODO — measure on phone** |
+| Core (target ≤ 200 MB) | app shell + ONNX runtime + whisper-tiny q8 + e5-small q8 + heads.json + Thai clips | **197.3 MB** in emulated Chrome (clips not yet recorded); confirm on phone |
 | Translation pack (optional) | NLLB-200-distilled-600M q8 | **TODO — measure on phone** |
 | App shell precache (measured at build) | JS/CSS/HTML + ONNX runtime WASM (26.9 MB) + icons | 27,118 KiB |
 
