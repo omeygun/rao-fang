@@ -1,0 +1,41 @@
+{
+ "teacher_model": "claude-opus-5-5",
+ "prompt_version": "gen-v1",
+ "failed_batches": 0,
+ "per_lang": {
+  "en": {
+   "generated": 450,
+   "relabeled": 450,
+   "aspect_set_agree": 372,
+   "full_agree": 360
+  },
+  "zh": {
+   "generated": 450,
+   "relabeled": 450,
+   "aspect_set_agree": 380,
+   "full_agree": 361
+  },
+  "ko": {
+   "generated": 450,
+   "relabeled": 450,
+   "aspect_set_agree": 410,
+   "full_agree": 395
+  },
+  "th": {
+   "generated": 150,
+   "relabeled": 150,
+   "aspect_set_agree": 137,
+   "full_agree": 132
+  }
+ },
+ "total": {
+  "generated": 1500,
+  "relabeled": 1500,
+  "aspect_set_agree": 1299,
+  "full_agree": 1248
+ },
+ "full_agreement_rate": 0.832,
+ "aspect_set_agreement_rate": 0.866,
+ "duplicates_dropped": 6,
+ "kept": 1242
+}

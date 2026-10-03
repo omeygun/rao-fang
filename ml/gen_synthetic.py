@@ -268,6 +268,9 @@ def main():
                 print(f"{i}/{len(all_slots)} batches done, {len(rows)} rows kept")
 
     rows.sort(key=lambda r: r["id"])
+    # Identical texts would leak across the train/dev split; keep the first.
+    seen, n_before = set(), len(rows)
+    rows = [r for r in rows if not (r["text"] in seen or seen.add(r["text"]))]
     Path(args.out).write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows))
     tot = {k: sum(s[k] for s in stats.values()) for k in ("generated", "relabeled", "aspect_set_agree", "full_agree")}
     report = {
@@ -275,6 +278,7 @@ def main():
         "per_lang": stats, "total": tot,
         "full_agreement_rate": tot["full_agree"] / tot["relabeled"] if tot["relabeled"] else None,
         "aspect_set_agreement_rate": tot["aspect_set_agree"] / tot["relabeled"] if tot["relabeled"] else None,
+        "duplicates_dropped": n_before - len(rows),
         "kept": len(rows),
     }
     (DATA / "synthetic_stats.json").write_text(json.dumps(report, indent=1, ensure_ascii=False))
