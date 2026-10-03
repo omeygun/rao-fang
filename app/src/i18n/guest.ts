@@ -13,6 +13,8 @@ export const G: Record<GuestLang, {
   rateHint: string;
   steps: Record<string, string>;
   skipStep: string;
+  like: string;
+  dislike: string;
   openTitle: string;
   openHint: string;
   record: string;
@@ -43,6 +45,8 @@ export const G: Record<GuestLang, {
     rateHint: 'Tap 👍 or 👎, or skip.',
     steps: { walk: 'Walk through the farm', picking: 'Picking coffee cherries', processing: 'Processing & roasting', tasting: 'Coffee tasting', host: 'Our hosts' },
     skipStep: 'Skip',
+    like: 'I liked it',
+    dislike: 'I did not like it',
     openTitle: 'What would make this better? Anything you would buy?',
     openHint: 'Speak or type. You can edit the text before sending.',
     record: '🎤 Speak',
@@ -73,6 +77,8 @@ export const G: Record<GuestLang, {
     rateHint: '点 👍 或 👎，也可以跳过。',
     steps: { walk: '农场徒步', picking: '采摘咖啡果', processing: '咖啡加工与烘焙', tasting: '咖啡品尝', host: '主人的招待' },
     skipStep: '跳过',
+    like: '喜欢',
+    dislike: '不喜欢',
     openTitle: '怎样能让体验更好？有没有想买的东西？',
     openHint: '可以说话或打字。发送前可以修改文字。',
     record: '🎤 说话',
@@ -103,6 +109,8 @@ export const G: Record<GuestLang, {
     rateHint: '👍 또는 👎를 누르거나 건너뛰세요.',
     steps: { walk: '농장 산책', picking: '커피 열매 따기', processing: '가공과 로스팅', tasting: '커피 시음', host: '호스트의 환대' },
     skipStep: '건너뛰기',
+    like: '좋았어요',
+    dislike: '별로였어요',
     openTitle: '무엇이 더 좋아지면 좋을까요? 사고 싶은 것이 있나요?',
     openHint: '말하거나 입력하세요. 보내기 전에 텍스트를 고칠 수 있습니다.',
     record: '🎤 말하기',

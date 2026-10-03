@@ -32,7 +32,7 @@ export function Guest() {
       <main className="screen guest" lang={lang}>
         <h1>{t.consentTitle}</h1>
         <ul className="consent">{t.consentBody.map((p, i) => <li key={i}>{p}</li>)}</ul>
-        <div className="row stack">
+        <div className="row stack cta-bar">
           <button className="primary big-btn" onClick={async () => {
             const d = await db();
             const consentId = uid(), vid = uid(), at = Date.now();
@@ -53,7 +53,8 @@ export function Guest() {
   if (step === 'open') return <OpenQuestion lang={lang} visitId={visitId!} onDone={() => setStep('thanks')} />;
   return (
     <main className="screen center guest" lang={lang}>
-      <h1>🙏 {t.thanks}</h1>
+      <p className="celebrate" aria-hidden>🙏</p>
+      <h1>{t.thanks}</h1>
       <p>{t.thanksBody}</p>
       <button className="primary big-btn" onClick={() => go('/')}>{t.done}</button>
     </main>
@@ -78,8 +79,8 @@ function Ratings({ lang, visitId, onDone }: { lang: GuestLang; visitId: string; 
         <figcaption>{t.steps[s.id]}</figcaption>
       </figure>
       <div className="row rate">
-        <button className="thumb" onClick={() => rate('up')} aria-label="👍">👍</button>
-        <button className="thumb" onClick={() => rate('down')} aria-label="👎">👎</button>
+        <button className="thumb" onClick={() => rate('up')} aria-label={t.like}>👍</button>
+        <button className="thumb" onClick={() => rate('down')} aria-label={t.dislike}>👎</button>
       </div>
       <button className="link" onClick={next}>{t.skipStep} →</button>
     </main>
@@ -165,8 +166,10 @@ function OpenQuestion({ lang, visitId, onDone }: { lang: GuestLang; visitId: str
       {busy && <p className="spinner">⏳ {t.transcribing}</p>}
       {err && <p className="warn">{err}</p>}
       {asrText !== undefined && <p className="muted small">{t.editHint}</p>}
-      <textarea rows={6} value={text} placeholder={t.placeholder} onChange={(e) => setText(e.target.value)} />
-      <button className="primary big-btn" disabled={busy || !!rec} onClick={submit}>{t.submit}</button>
+      <textarea rows={6} value={text} placeholder={t.placeholder} aria-label={t.openTitle} onChange={(e) => setText(e.target.value)} />
+      <div className="cta-bar">
+        <button className="primary big-btn" disabled={busy || !!rec} onClick={submit}>{t.submit}</button>
+      </div>
     </main>
   );
 }

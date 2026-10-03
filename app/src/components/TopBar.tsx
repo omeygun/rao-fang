@@ -1,11 +1,8 @@
-import type { ReactNode } from 'react';
-
-export function TopBar({ title, back = '#/', right }: { title: string; back?: string; right?: ReactNode }) {
+export function TopBar({ title, back = '#/' }: { title: string; back?: string }) {
   return (
     <header className="topbar">
       <a className="back" href={back} aria-label="กลับ">←</a>
       <h1>{title}</h1>
-      <span>{right}</span>
     </header>
   );
 }

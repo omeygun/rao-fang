@@ -43,8 +43,7 @@ export function normalizeKm(
       i += key.length;
       continue;
     }
-    let j = nextBoundary(i);
-    // Keep runs of Thai together if the segmenter split mid-run on a non-Thai char.
+    const j = nextBoundary(i);
     const seg = text.slice(i, j);
     const known = knownThai.has(seg) || seg.length < 2;
     tokens.push({ text: seg, kind: known ? 'thai' : 'unknown' });

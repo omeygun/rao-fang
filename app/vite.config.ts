@@ -14,7 +14,6 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg', 'tour/*', 'audio/th/*', 'models/*'],
       manifest: {
         name: 'เราฟัง Rao Fang',
         short_name: 'เราฟัง',

@@ -1,5 +1,5 @@
 // Settings (spec §6.6, §16.2, §16.4).
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { db, deleteAllData, deleteVisit, exportDataset, getSetting, setSetting, type VisitRec } from '../db/db';
 import { TopBar } from '../components/TopBar';
 import { hashPin } from '../components/PinGate';
@@ -19,7 +19,7 @@ const CORE_BUDGET = 200 * 1024 * 1024;
 
 function useProgress(): [string, Progress] {
   const [msg, setMsg] = useState('');
-  const files = new Map<string, [number, number]>();
+  const files = useRef(new Map<string, [number, number]>()).current;
   return [msg, (p) => {
     if (p.file && p.total) files.set(p.file, [p.loaded ?? 0, p.total]);
     let l = 0, t = 0;

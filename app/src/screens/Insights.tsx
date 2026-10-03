@@ -51,7 +51,13 @@ export function Insights() {
         ))}
       </div>
       <p className="muted">แขก {ins.guests} คน {pending && '· ⏳ กำลังประมวลผล…'}</p>
-      {empty && <Card frags={T.noData()} title="—" icon="🌱" />}
+      {empty && (
+        <section className="card empty">
+          <p className="icon">🌱</p>
+          <p className="sentence">{renderThai(T.noData())}</p>
+          <a className="chip on" href="#/guest">🧳 ให้แขกรีวิว</a>
+        </section>
+      )}
 
       {ins.buy.n > 0 && (
         <Card icon="🛍️" title="แขกอยากซื้อ" frags={ins.buy.sentence} weak={ins.buy.weak} onTap={() => setOpen(open === 'buy' ? null : 'buy')}>
@@ -76,16 +82,19 @@ export function Insights() {
         </Card>
       ))}
 
-      <section className="card unsure">
-        <div className="card-head">
-          <span className="icon">❓</span>
-          <h2>ไม่แน่ใจ — ให้คนช่วยดู</h2>
-          <SpeakButton frags={ins.unsureSentence} />
-        </div>
-        <p className="sentence">{renderThai(ins.unsureSentence)}</p>
-        {ins.unsure.map((f) => <UnsureItem key={f.id} f={f} onChanged={reload} />)}
-      </section>
-      <DecideFooter />
+      {ins.unsure.length > 0 ? (
+        <section className="card unsure">
+          <div className="card-head">
+            <span className="icon">❓</span>
+            <h2>ไม่แน่ใจ — ให้คนช่วยดู</h2>
+            <SpeakButton frags={ins.unsureSentence} />
+          </div>
+          <p className="sentence">{renderThai(ins.unsureSentence)}</p>
+          {ins.unsure.map((f) => <UnsureItem key={f.id} f={f} onChanged={reload} />)}
+        </section>
+      ) : (
+        !empty && <p className="muted small">✅ ไม่มีความเห็นที่ต้องให้คนช่วยดู</p>
+      )}
     </main>
   );
 }
@@ -96,17 +105,17 @@ function Card({ icon, title, frags, weak, counts, onTap, children }: {
 }) {
   return (
     <section className="card">
-      <div className="card-head" onClick={onTap} role={onTap ? 'button' : undefined}>
-        <span className="icon">{icon}</span>
+      <div className="card-head" onClick={onTap}>
+        <span className="icon" aria-hidden>{icon}</span>
         <h2>{title}</h2>
-        {counts && <span className="counts">👍 {counts.up} · 👎 {counts.down}</span>}
         <SpeakButton frags={frags} />
       </div>
       <p className="sentence" onClick={onTap}>{renderThai(frags)}</p>
+      {counts && <p className="counts">👍 {counts.up} · 👎 {counts.down}</p>}
       {weak && (
         <p className="badge weak">⚠️ {renderThai(T.weakEvidence())} <SpeakButton frags={T.weakEvidence()} /></p>
       )}
-      {onTap && <button className="link" onClick={onTap}>ดูความเห็นจริง ›</button>}
+      {onTap && <button className="link" aria-expanded={!!children} onClick={onTap}>ดูความเห็นจริง ›</button>}
       {children}
       <DecideFooter />
     </section>
@@ -145,7 +154,6 @@ function Quote({ f, ev, pack, onChanged }: { f: FeedbackRec; ev: Evidence; pack:
       })
       .catch(() => setErr(true))
       .finally(() => setBusy(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pack, f.id]);
   const labels = (f.humanLabels?.aspects ?? f.model?.aspects ?? []).map((a) => `${ASPECT_INFO[a.aspect].icon} ${ASPECT_INFO[a.aspect].th}${a.sentiment ? ' (' + SENTIMENT_TH[a.sentiment] + ')' : ''}`);
   return (

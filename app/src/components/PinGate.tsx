@@ -39,7 +39,7 @@ export function PinGate({ children, onUnlock }: { children: ReactNode; onUnlock:
       {wrong && <p className="warn">รหัสไม่ถูกต้อง</p>}
       <div className="keypad">
         {['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '⌫'].map((k) => (
-          <button key={k || 'blank'} disabled={!k} onClick={() => { setWrong(false); setPin((p) => (k === '⌫' ? p.slice(0, -1) : (p + k).slice(0, 4))); }}>
+          <button key={k || 'blank'} disabled={!k} aria-label={k === '⌫' ? 'ลบ' : undefined} onClick={() => { setWrong(false); setPin((p) => (k === '⌫' ? p.slice(0, -1) : (p + k).slice(0, 4))); }}>
             {k}
           </button>
         ))}

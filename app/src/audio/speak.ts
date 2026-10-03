@@ -10,11 +10,6 @@ function manifest() {
   return manifestP;
 }
 
-export function thaiVoices(): SpeechSynthesisVoice[] {
-  if (!('speechSynthesis' in globalThis)) return [];
-  return speechSynthesis.getVoices().filter((v) => v.lang.toLowerCase().startsWith('th'));
-}
-
 /** speechSynthesis voices load asynchronously on Android Chrome. */
 export function voicesReady(): Promise<SpeechSynthesisVoice[]> {
   if (!('speechSynthesis' in globalThis)) return Promise.resolve([]);
