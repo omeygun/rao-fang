@@ -53,4 +53,13 @@ Measured at build time in the dev container (not on the phone, no models):
 | `ort-wasm-simd-threaded.asyncify.wasm` (part of the above) | 26,861,777 bytes | `ls -l app/public/ort/` |
 | Main JS bundle | 841 kB (250 kB gzip) | `vite build` |
 
-Model weight sizes could not be measured in the build container (huggingface.co is blocked by its network policy).
+Model files measured by download in the build container (not yet in Cache Storage on the phone):
+
+| Model file | Size |
+|---|---|
+| `Xenova/multilingual-e5-small` `onnx/model_quantized.onnx` (q8) | 112 MB |
+| `app/public/models/heads.json` | 61 KB |
+
+Embedding parity, Python fp32 (`intfloat/multilingual-e5-small`) vs. the app's q8 ONNX file run with ONNX Runtime (Python),
+same pooling: cosine 0.99840 / 0.99762 / 0.99546 / 0.99413 / 0.99720 on the 5 parity sentences (en, zh, ko, th, en) — all > 0.99.
+Still to confirm on the phone with transformers.js at `#/dev/parity`.

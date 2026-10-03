@@ -8,3 +8,24 @@ overwritten when it runs. It needs:
 2. A trained student: `python ml/train_student.py` (needs `ml/data/synthetic.jsonl`).
 
 Then run `python ml/eval.py`. No evaluation numbers have been produced yet; none are claimed anywhere.
+
+---
+
+## Interim: synthetic dev split (not the headline number)
+
+Student trained 2026-10-03 on 1,055 synthetic items, scored on the 187-item synthetic dev split
+(Claude-written, same distribution as training, also used to tune the thresholds — so these numbers are optimistic).
+Thresholds tuned: τ_lo = 0.65, τ_hi = 0.70 (target precision-when-sure ≥ 0.85). Source: `ml/data/student_dev_report.json`.
+
+| Group | n | Aspect micro-F1 | Aspect macro-F1 | Sentiment acc. (n pairs) | Coverage | Precision when sure |
+|---|---|---|---|---|---|---|
+| all (fp32 encoder, Python) | 187 | 0.665 | 0.571 | 0.846 (136) | 0.540 | 0.952 |
+| all (app's q8 ONNX encoder) | 187 | 0.633 | — | — | 0.503 | 0.954 |
+| en | 54 | 0.678 | 0.560 | 0.878 (41) | 0.593 | 0.975 |
+| ko | 59 | 0.694 | 0.555 | 0.810 (42) | 0.475 | 1.000 |
+| zh | 54 | 0.654 | 0.603 | 0.800 (35) | 0.500 | 0.879 |
+| th | 20 (n < 30: indicative only) | 0.600 | 0.437 | 0.944 (18) | 0.700 | 0.944 |
+
+The q8 row was computed by running the app's `Xenova/multilingual-e5-small` `model_quantized.onnx` with ONNX Runtime (Python),
+same mean pooling + L2 normalisation as `embed.ts` — not transformers.js itself. Quantisation lowers coverage (more items go to
+“not sure”) while precision-when-sure holds. The human test set result above, once it exists, is the number to quote.

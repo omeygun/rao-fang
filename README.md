@@ -14,12 +14,10 @@ Spec: [`spec.md`](spec.md).
 | COOP/COEP headers (`vercel.json`, `public/_headers`), same-origin ONNX runtime, service-worker precache | ✅ `crossOriginIsolated === true` under `vite preview` |
 | DevBenchmark / DevParity pages | ✅ built — **not run on a phone yet** |
 | ML pipeline (`ml/`): teacher, student, export, eval, km_eval, FLORES | ✅ code done; smoke-tested end-to-end with a fake embedder on throwaway fixtures |
-| `synthetic.jsonl`, trained `heads.json` | ❌ not generated — needs `ANTHROPIC_API_KEY` and Hugging Face access |
+| `synthetic.jsonl` (1,242 items) and trained `heads.json` (61 KB) | ✅ generated with `claude-opus-5-5`, trained in 7.5 min on CPU; synthetic-dev micro-F1 0.665, 54% auto-classified at 95% precision (`docs/eval.md`) |
 | Phase 0 numbers, model sizes | ❌ TODO on the phone (`docs/benchmarks.md`) |
 | Human test set, Kham Mueang pairs, Thai audio clips, tour photos, evidence citations | ❌ **[MANUAL]** — templates and scripts provided |
 
-Without `heads.json`, the app still runs: every text feedback goes to the “ไม่แน่ใจ” queue for manual tagging,
-and photo ratings are counted normally.
 
 ## Run the app
 

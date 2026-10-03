@@ -33,7 +33,8 @@ class E5Embedder:
         self.batch_size = batch_size
         # Verify the pipeline is mean pooling, as transformers.js uses pooling: "mean".
         pool = [m for m in self.model if m.__class__.__name__ == "Pooling"]
-        assert pool and pool[0].pooling_mode_mean_tokens, "expected mean pooling"
+        cfg = pool[0].get_config_dict() if pool else {}
+        assert cfg.get("pooling_mode") == "mean" or cfg.get("pooling_mode_mean_tokens"), f"expected mean pooling, got {cfg}"
 
     def embed(self, inputs: list[str]) -> np.ndarray:
         """`inputs` must already carry the "query: " prefix."""
