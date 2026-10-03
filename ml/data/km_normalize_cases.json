@@ -1,0 +1,7 @@
+[
+  {"note": "Synthetic placeholder strings for algorithm parity only; not Kham Mueang data.",
+   "text": "กขคกข", "dict": {"กขค": "หนึ่ง", "กข": "สอง"}, "expected": "หนึ่งสอง"},
+  {"text": "ฉันกขไป", "dict": {"กข": "สอง"}, "expected": "ฉันสองไป"},
+  {"text": "abc กขค", "dict": {"กข": "สอง"}, "expected": "abc สองค"},
+  {"text": "ไม่มีคำ", "dict": {}, "expected": "ไม่มีคำ"}
+]

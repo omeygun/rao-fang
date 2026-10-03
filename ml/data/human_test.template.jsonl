@@ -1,0 +1,3 @@
+{"id": "h-en-001", "text": "<write a real-sounding English feedback here>", "lang": "en", "aspects": [{"aspect": "tasting", "sentiment": "positive"}], "is_suggestion": false, "source": "human", "author": "<pseudonym>"}
+{"id": "h-zh-001", "text": "<中文反馈>", "lang": "zh", "aspects": [], "is_suggestion": false, "source": "human", "author": "<pseudonym>"}
+{"id": "h-ko-001", "text": "<한국어 피드백>", "lang": "ko", "aspects": [{"aspect": "purchase_interest", "sentiment": "positive"}], "is_suggestion": false, "source": "human", "author": "<pseudonym>"}

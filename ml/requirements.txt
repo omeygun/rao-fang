@@ -1,0 +1,12 @@
+# CPU-only pipeline (spec §8). Python 3.11.
+anthropic>=1.0
+sentence-transformers>=3.0
+scikit-learn>=1.4
+pandas>=2.0
+numpy>=1.26
+sacrebleu>=2.4
+datasets>=2.19
+pythainlp>=5.0
+# flores_eval.py only (optional, P2):
+transformers>=4.44
+sentencepiece

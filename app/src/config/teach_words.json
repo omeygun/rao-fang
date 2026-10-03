@@ -1,0 +1,614 @@
+[
+ {
+  "id": "coffee",
+  "th": "กาแฟ",
+  "icon": "☕",
+  "en": "coffee"
+ },
+ {
+  "id": "coffee_cherry",
+  "th": "ผลกาแฟ",
+  "icon": "🍒",
+  "en": "coffee cherry"
+ },
+ {
+  "id": "coffee_bean",
+  "th": "เมล็ดกาแฟ",
+  "icon": "🫘",
+  "en": "coffee bean"
+ },
+ {
+  "id": "coffee_tree",
+  "th": "ต้นกาแฟ",
+  "icon": "🌳",
+  "en": "coffee tree"
+ },
+ {
+  "id": "garden",
+  "th": "สวน",
+  "icon": "🌿",
+  "en": "garden"
+ },
+ {
+  "id": "mountain",
+  "th": "ภูเขา",
+  "icon": "⛰️",
+  "en": "mountain"
+ },
+ {
+  "id": "forest",
+  "th": "ป่า",
+  "icon": "🌲",
+  "en": "forest"
+ },
+ {
+  "id": "water",
+  "th": "น้ำ",
+  "icon": "💧",
+  "en": "water"
+ },
+ {
+  "id": "rain",
+  "th": "ฝน",
+  "icon": "🌧️",
+  "en": "rain"
+ },
+ {
+  "id": "sun",
+  "th": "แดด",
+  "icon": "☀️",
+  "en": "sunshine"
+ },
+ {
+  "id": "hot",
+  "th": "ร้อน",
+  "icon": "🥵",
+  "en": "hot"
+ },
+ {
+  "id": "cold",
+  "th": "หนาว",
+  "icon": "🥶",
+  "en": "cold"
+ },
+ {
+  "id": "road",
+  "th": "ถนน",
+  "icon": "🛣️",
+  "en": "road"
+ },
+ {
+  "id": "path",
+  "th": "ทางเดิน",
+  "icon": "🥾",
+  "en": "path"
+ },
+ {
+  "id": "far",
+  "th": "ไกล",
+  "icon": "📏",
+  "en": "far"
+ },
+ {
+  "id": "near",
+  "th": "ใกล้",
+  "icon": "📍",
+  "en": "near"
+ },
+ {
+  "id": "steep",
+  "th": "ชัน",
+  "icon": "⛰️",
+  "en": "steep"
+ },
+ {
+  "id": "slippery",
+  "th": "ลื่น",
+  "icon": "⚠️",
+  "en": "slippery"
+ },
+ {
+  "id": "tired",
+  "th": "เหนื่อย",
+  "icon": "😮‍💨",
+  "en": "tired"
+ },
+ {
+  "id": "walk",
+  "th": "เดิน",
+  "icon": "🚶",
+  "en": "walk"
+ },
+ {
+  "id": "pick",
+  "th": "เก็บ",
+  "icon": "✋",
+  "en": "pick"
+ },
+ {
+  "id": "dry",
+  "th": "ตาก",
+  "icon": "🌞",
+  "en": "dry (in sun)"
+ },
+ {
+  "id": "roast",
+  "th": "คั่ว",
+  "icon": "🔥",
+  "en": "roast"
+ },
+ {
+  "id": "grind",
+  "th": "บด",
+  "icon": "⚙️",
+  "en": "grind"
+ },
+ {
+  "id": "wash",
+  "th": "ล้าง",
+  "icon": "🚿",
+  "en": "wash"
+ },
+ {
+  "id": "peel",
+  "th": "สี",
+  "icon": "🫘",
+  "en": "hull / peel"
+ },
+ {
+  "id": "ferment",
+  "th": "หมัก",
+  "icon": "🫙",
+  "en": "ferment"
+ },
+ {
+  "id": "taste",
+  "th": "ชิม",
+  "icon": "👅",
+  "en": "taste"
+ },
+ {
+  "id": "drink",
+  "th": "ดื่ม",
+  "icon": "🥤",
+  "en": "drink"
+ },
+ {
+  "id": "eat",
+  "th": "กิน",
+  "icon": "🍽️",
+  "en": "eat"
+ },
+ {
+  "id": "delicious",
+  "th": "อร่อย",
+  "icon": "😋",
+  "en": "delicious"
+ },
+ {
+  "id": "bitter",
+  "th": "ขม",
+  "icon": "😖",
+  "en": "bitter"
+ },
+ {
+  "id": "sour",
+  "th": "เปรี้ยว",
+  "icon": "🍋",
+  "en": "sour"
+ },
+ {
+  "id": "sweet",
+  "th": "หวาน",
+  "icon": "🍯",
+  "en": "sweet"
+ },
+ {
+  "id": "fragrant",
+  "th": "หอม",
+  "icon": "🌸",
+  "en": "fragrant"
+ },
+ {
+  "id": "strong",
+  "th": "เข้ม",
+  "icon": "☕",
+  "en": "strong"
+ },
+ {
+  "id": "rice",
+  "th": "ข้าว",
+  "icon": "🍚",
+  "en": "rice"
+ },
+ {
+  "id": "food",
+  "th": "อาหาร",
+  "icon": "🍲",
+  "en": "food"
+ },
+ {
+  "id": "snack",
+  "th": "ขนม",
+  "icon": "🍪",
+  "en": "snack"
+ },
+ {
+  "id": "tea",
+  "th": "ชา",
+  "icon": "🍵",
+  "en": "tea"
+ },
+ {
+  "id": "guest",
+  "th": "แขก",
+  "icon": "🧳",
+  "en": "guest"
+ },
+ {
+  "id": "tourist",
+  "th": "นักท่องเที่ยว",
+  "icon": "📷",
+  "en": "tourist"
+ },
+ {
+  "id": "friend",
+  "th": "เพื่อน",
+  "icon": "🤝",
+  "en": "friend"
+ },
+ {
+  "id": "child",
+  "th": "ลูก",
+  "icon": "👧",
+  "en": "child"
+ },
+ {
+  "id": "mother",
+  "th": "แม่",
+  "icon": "👩",
+  "en": "mother"
+ },
+ {
+  "id": "father",
+  "th": "พ่อ",
+  "icon": "👨",
+  "en": "father"
+ },
+ {
+  "id": "house",
+  "th": "บ้าน",
+  "icon": "🏡",
+  "en": "house"
+ },
+ {
+  "id": "village",
+  "th": "หมู่บ้าน",
+  "icon": "🏘️",
+  "en": "village"
+ },
+ {
+  "id": "car",
+  "th": "รถ",
+  "icon": "🚗",
+  "en": "car"
+ },
+ {
+  "id": "motorbike",
+  "th": "มอเตอร์ไซค์",
+  "icon": "🏍️",
+  "en": "motorbike"
+ },
+ {
+  "id": "money",
+  "th": "เงิน",
+  "icon": "💰",
+  "en": "money"
+ },
+ {
+  "id": "price",
+  "th": "ราคา",
+  "icon": "🏷️",
+  "en": "price"
+ },
+ {
+  "id": "expensive",
+  "th": "แพง",
+  "icon": "💸",
+  "en": "expensive"
+ },
+ {
+  "id": "cheap",
+  "th": "ถูก",
+  "icon": "🪙",
+  "en": "cheap"
+ },
+ {
+  "id": "buy",
+  "th": "ซื้อ",
+  "icon": "🛍️",
+  "en": "buy"
+ },
+ {
+  "id": "sell",
+  "th": "ขาย",
+  "icon": "🧺",
+  "en": "sell"
+ },
+ {
+  "id": "bag",
+  "th": "ถุง",
+  "icon": "👜",
+  "en": "bag"
+ },
+ {
+  "id": "gift",
+  "th": "ของฝาก",
+  "icon": "🎁",
+  "en": "souvenir"
+ },
+ {
+  "id": "time",
+  "th": "เวลา",
+  "icon": "⏰",
+  "en": "time"
+ },
+ {
+  "id": "morning",
+  "th": "เช้า",
+  "icon": "🌅",
+  "en": "morning"
+ },
+ {
+  "id": "afternoon",
+  "th": "บ่าย",
+  "icon": "🌤️",
+  "en": "afternoon"
+ },
+ {
+  "id": "evening",
+  "th": "เย็น",
+  "icon": "🌇",
+  "en": "evening"
+ },
+ {
+  "id": "today",
+  "th": "วันนี้",
+  "icon": "📅",
+  "en": "today"
+ },
+ {
+  "id": "tomorrow",
+  "th": "พรุ่งนี้",
+  "icon": "➡️",
+  "en": "tomorrow"
+ },
+ {
+  "id": "week",
+  "th": "อาทิตย์",
+  "icon": "🗓️",
+  "en": "week"
+ },
+ {
+  "id": "long",
+  "th": "นาน",
+  "icon": "⌛",
+  "en": "long (time)"
+ },
+ {
+  "id": "short",
+  "th": "สั้น",
+  "icon": "✂️",
+  "en": "short"
+ },
+ {
+  "id": "fast",
+  "th": "เร็ว",
+  "icon": "⚡",
+  "en": "fast"
+ },
+ {
+  "id": "slow",
+  "th": "ช้า",
+  "icon": "🐢",
+  "en": "slow"
+ },
+ {
+  "id": "many",
+  "th": "มาก",
+  "icon": "➕",
+  "en": "many / much"
+ },
+ {
+  "id": "few",
+  "th": "น้อย",
+  "icon": "➖",
+  "en": "few / little"
+ },
+ {
+  "id": "big",
+  "th": "ใหญ่",
+  "icon": "🐘",
+  "en": "big"
+ },
+ {
+  "id": "small",
+  "th": "เล็ก",
+  "icon": "🐜",
+  "en": "small"
+ },
+ {
+  "id": "good",
+  "th": "ดี",
+  "icon": "👍",
+  "en": "good"
+ },
+ {
+  "id": "bad",
+  "th": "ไม่ดี",
+  "icon": "👎",
+  "en": "bad"
+ },
+ {
+  "id": "beautiful",
+  "th": "สวย",
+  "icon": "🌺",
+  "en": "beautiful"
+ },
+ {
+  "id": "like",
+  "th": "ชอบ",
+  "icon": "❤️",
+  "en": "like"
+ },
+ {
+  "id": "dislike",
+  "th": "ไม่ชอบ",
+  "icon": "💔",
+  "en": "dislike"
+ },
+ {
+  "id": "happy",
+  "th": "ดีใจ",
+  "icon": "😊",
+  "en": "happy"
+ },
+ {
+  "id": "fun",
+  "th": "สนุก",
+  "icon": "🎉",
+  "en": "fun"
+ },
+ {
+  "id": "boring",
+  "th": "น่าเบื่อ",
+  "icon": "😐",
+  "en": "boring"
+ },
+ {
+  "id": "speak",
+  "th": "พูด",
+  "icon": "🗣️",
+  "en": "speak"
+ },
+ {
+  "id": "listen",
+  "th": "ฟัง",
+  "icon": "👂",
+  "en": "listen"
+ },
+ {
+  "id": "understand",
+  "th": "เข้าใจ",
+  "icon": "💡",
+  "en": "understand"
+ },
+ {
+  "id": "not_understand",
+  "th": "ไม่เข้าใจ",
+  "icon": "❓",
+  "en": "not understand"
+ },
+ {
+  "id": "know",
+  "th": "รู้",
+  "icon": "🧠",
+  "en": "know"
+ },
+ {
+  "id": "want",
+  "th": "อยาก",
+  "icon": "🙏",
+  "en": "want"
+ },
+ {
+  "id": "come",
+  "th": "มา",
+  "icon": "⬅️",
+  "en": "come"
+ },
+ {
+  "id": "go",
+  "th": "ไป",
+  "icon": "➡️",
+  "en": "go"
+ },
+ {
+  "id": "return",
+  "th": "กลับ",
+  "icon": "↩️",
+  "en": "return"
+ },
+ {
+  "id": "again",
+  "th": "อีก",
+  "icon": "🔁",
+  "en": "again"
+ },
+ {
+  "id": "see",
+  "th": "ดู",
+  "icon": "👀",
+  "en": "look / see"
+ },
+ {
+  "id": "do",
+  "th": "ทำ",
+  "icon": "🛠️",
+  "en": "do / make"
+ },
+ {
+  "id": "give",
+  "th": "ให้",
+  "icon": "🤲",
+  "en": "give"
+ },
+ {
+  "id": "yes",
+  "th": "ใช่",
+  "icon": "✅",
+  "en": "yes"
+ },
+ {
+  "id": "no",
+  "th": "ไม่",
+  "icon": "❌",
+  "en": "no"
+ },
+ {
+  "id": "very",
+  "th": "มาก ๆ",
+  "icon": "‼️",
+  "en": "very"
+ },
+ {
+  "id": "a_little",
+  "th": "นิดหน่อย",
+  "icon": "🤏",
+  "en": "a little"
+ },
+ {
+  "id": "what",
+  "th": "อะไร",
+  "icon": "❔",
+  "en": "what"
+ },
+ {
+  "id": "where",
+  "th": "ที่ไหน",
+  "icon": "🗺️",
+  "en": "where"
+ },
+ {
+  "id": "why",
+  "th": "ทำไม",
+  "icon": "🤔",
+  "en": "why"
+ },
+ {
+  "id": "how_much",
+  "th": "เท่าไหร่",
+  "icon": "🔢",
+  "en": "how much"
+ }
+]
