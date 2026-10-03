@@ -10,6 +10,7 @@ so re-running resumes where it stopped and never pays twice for the same call.
 
 Usage:
   export ANTHROPIC_API_KEY=...
+  export ANTHROPIC_WORKSPACE_ID=...   # only if the key is not scoped to a workspace
   python gen_synthetic.py --model <model-id> [--effort low] [--workers 4]
 The model id is a required flag on purpose: pick it yourself, nothing is assumed.
 
@@ -21,6 +22,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import random
 import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -159,7 +161,9 @@ Return JSON with one label entry per item id."""
 
 class Teacher:
     def __init__(self, model: str, effort: str | None):
-        self.client = anthropic.Anthropic(max_retries=6)
+        # Keys that are not scoped to a workspace need the workspace id on every request.
+        ws = os.environ.get("ANTHROPIC_WORKSPACE_ID")
+        self.client = anthropic.Anthropic(max_retries=6, default_headers={"anthropic-workspace-id": ws} if ws else None)
         self.model = model
         self.effort = effort
         CACHE.mkdir(parents=True, exist_ok=True)
