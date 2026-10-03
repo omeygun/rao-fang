@@ -1,0 +1,8 @@
+[
+  {"text": "I HATE the coffee. But, walking was fun", "clauses": ["I HATE the coffee.", "But, walking was fun"]},
+  {"text": "The coffee was really good, but I prefer walking.", "clauses": ["The coffee was really good", "but I prefer walking."]},
+  {"text": "咖啡很好喝，但是山路太陡了。", "clauses": ["咖啡很好喝", "但是山路太陡了。"]},
+  {"text": "커피는 맛있었지만 길이 너무 가팔랐어요.", "clauses": ["커피는 맛있었지만", "길이 너무 가팔랐어요."]},
+  {"text": "กาแฟอร่อยมาก แต่ทางเดินชันไปหน่อย", "clauses": ["กาแฟอร่อยมาก", "แต่ทางเดินชันไปหน่อย"]},
+  {"text": "Great tour!", "clauses": ["Great tour!"]}
+]
