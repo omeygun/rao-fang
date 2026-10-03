@@ -1,6 +1,6 @@
 // Background processing of saved feedback (spec §6.3).
 import { db, type FeedbackRec } from '../db/db';
-import { classify } from './classify';
+import { classify, loadHeads } from './classify';
 
 let running: Promise<void> | null = null;
 
@@ -14,12 +14,24 @@ export async function processOne(f: FeedbackRec): Promise<FeedbackRec> {
   }
 }
 
-/** Classify every pending item. Safe to call repeatedly; runs one batch at a time. */
+/**
+ * True if an item was classified by a different (or no) classifier than the one installed now, so an app
+ * update with a new heads.json re-sorts old feedback by itself. Human labels are never overwritten.
+ */
+export function isStale(f: FeedbackRec, headsVersion: string | undefined): boolean {
+  if (f.humanLabels || !headsVersion || f.status === 'pending') return false;
+  return f.status === 'error' || f.model?.headsVersion !== headsVersion;
+}
+
+/** Classify every pending or stale item. Safe to call repeatedly; runs one batch at a time. */
 export function processPending(): Promise<void> {
   running ??= (async () => {
     try {
       const d = await db();
-      const pending = (await d.getAll('feedback')).filter((f) => f.status === 'pending');
+      const version = (await loadHeads())?.version;
+      const pending = (await d.getAll('feedback')).filter((f) => f.status === 'pending' || isStale(f, version));
+      // Mark first, so Insights shows "processing" and refreshes while old items are re-sorted.
+      for (const f of pending) if (f.status !== 'pending') await d.put('feedback', { ...f, status: 'pending' });
       for (const f of pending) await d.put('feedback', await processOne(f));
     } finally {
       running = null;

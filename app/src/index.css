@@ -107,6 +107,9 @@ label { display: block; margin: 8px 0; }
 .quote { margin: 12px 0; padding: 12px; background: var(--brand-5); border-radius: var(--r-s); }
 .quote .orig { margin: 0 0 4px; }
 .unsure { border: 1px solid var(--warn-line); }
+.ready-ok { border: 1px solid var(--ok-line); background: var(--ok-bg); }
+.checks { list-style: none; padding: 0; margin: 8px 0 0; }
+.checks li { padding: 8px 0; border-top: 1px solid var(--line); }
 .empty { text-align: center; padding: 32px 20px; }
 .empty .icon { font-size: var(--icon-xl); }
 .picker { background: #fff; padding: 8px; border-radius: var(--r-s); }

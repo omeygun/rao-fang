@@ -33,18 +33,22 @@ Routes: `#/` home · `#/guest` · `#/insights` · `#/teach` · `#/settings` · `
 
 ## Deploy (HTTPS from day one, spec §16.1)
 
-- **Vercel:** import the repo, root directory `app`, framework Vite. Headers come from `app/vercel.json`.
-- **Netlify:** base directory `app`, build `npm run build`, publish `dist`. Headers from `app/public/_headers`.
+Import the repo on **Vercel** or **Netlify** and deploy — no settings needed. The root `vercel.json` / `netlify.toml`
+build `app/`, set the COOP/COEP headers and skip the server-only ONNX package. (If you set Vercel's Root Directory to
+`app` instead, `app/vercel.json` does the same.) Both paths were verified building from a clean copy of the repo.
 
-Test the phone **only over that HTTPS URL**. Verify on DevBenchmark that `crossOriginIsolated` is true.
-Model files are fetched from huggingface.co with CORS; under `Cross-Origin-Embedder-Policy: require-corp` CORS
-fetches are allowed — **verify on the phone**; if anything is blocked, switch the header to `credentialless` in both files.
+Test the phone **only over that HTTPS URL**. ⚙️ Settings opens with a **“พร้อมใช้ออฟไลน์ไหม?”** checklist that says
+what is missing and how to fix it, in Thai.
+
+**Updates:** pushing a new `heads.json` (or any app change) redeploys; the phone picks it up the next time the app is
+opened online, and feedback sorted by an older classifier is re-sorted automatically (hand-tagged items are kept).
+Models only need re-downloading if the encoder or Whisper model changes.
 
 ## Offline install on the phone
 
 1. Open the HTTPS URL in Chrome on the Android phone → menu → *Install app* / *Add to Home screen*.
 2. Open from the home screen → ⚙️ → *ดาวน์โหลด / ตรวจสอบโมเดลหลัก* (whisper-tiny + e5, ~197 MB, on Wi-Fi). Optional: *ดาวน์โหลดชุดแปลภาษา* (NLLB, large).
-3. Check the home chip shows ✅ and Settings shows persistent storage granted (installing to home screen helps).
+3. Open ⚙️ Settings: the readiness checklist at the top should be all ✅ (it lists the fix for anything ❌).
 4. Airplane mode on → everything (guest → insights → not-sure → teach → notes) keeps working.
 
 ## Model sizes

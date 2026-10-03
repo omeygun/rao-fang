@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { db, deleteAllData, deleteVisit, exportDataset, getSetting, setSetting, type VisitRec } from '../db/db';
 import { TopBar } from '../components/TopBar';
+import { ReadyCheck } from '../components/ReadyCheck';
 import { hashPin } from '../components/PinGate';
 import { MODELS, MODEL_CACHE, type Progress } from '../ml/env';
 import { asrModel, loadAsr } from '../ml/asr';
@@ -62,6 +63,7 @@ export function Settings() {
   return (
     <main className="screen settings">
       <TopBar title="ตั้งค่า" />
+      <ReadyCheck />
 
       <section className="card">
         <h2>🧠 โมเดลหลัก (ใช้ออฟไลน์)</h2>

@@ -1,0 +1,8 @@
+# Lets Netlify build from the repo root with no settings. COOP/COEP headers come from app/public/_headers.
+[build]
+  base = "app"
+  command = "npm ci --ignore-scripts && npm run copy-ort && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"

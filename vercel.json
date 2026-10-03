@@ -1,0 +1,18 @@
+{
+  "$comment": "Lets Vercel build from the repo root with no settings. If the project's Root Directory is set to app/, app/vercel.json is used instead (same headers).",
+  "installCommand": "cd app && npm ci --ignore-scripts && npm run copy-ort",
+  "buildCommand": "cd app && npm run build",
+  "outputDirectory": "app/dist",
+  "framework": null,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
+        { "key": "Cross-Origin-Embedder-Policy", "value": "require-corp" }
+      ]
+    },
+    { "source": "/sw.js", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
+  ],
+  "rewrites": [{ "source": "/((?!.*\\.).*)", "destination": "/index.html" }]
+}

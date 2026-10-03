@@ -10,6 +10,7 @@ import type { FeedbackRec, RatingRec, VisitRec } from '../db/db';
 import cases from '../../../ml/data/km_normalize_cases.json';
 import clauseCases from '../../../ml/data/clause_cases.json';
 import { splitClauses } from '../ml/clauses';
+import { isStale } from '../ml/process';
 
 describe('kmNormalize', () => {
   // Test dictionary entries are made-up placeholders, not real Kham Mueang data.
@@ -132,5 +133,18 @@ describe('Teach Mode sentence swap', () => {
 describe('clause splitter', () => {
   it('matches the shared JS/Python cases', () => {
     for (const c of clauseCases as { text: string; clauses: string[] }[]) expect(splitClauses(c.text)).toEqual(c.clauses);
+  });
+});
+
+describe('re-sorting after a classifier update', () => {
+  const at = 0;
+  const base = { id: 'x', visitId: 'v', at, lang: 'en' as const, text: 't', inputMode: 'text' as const, unsure: false, unsureReasons: [] };
+  const model = (v: string) => ({ aspects: [], suggestionP: 0, headsVersion: v, at });
+  it('re-sorts items from an older or missing classifier, never human-labelled ones', () => {
+    expect(isStale({ ...base, status: 'done', model: model('old') }, 'new')).toBe(true);
+    expect(isStale({ ...base, status: 'done', unsure: true, unsureReasons: ['no_classifier'] }, 'new')).toBe(true);
+    expect(isStale({ ...base, status: 'done', model: model('new') }, 'new')).toBe(false);
+    expect(isStale({ ...base, status: 'done', model: model('old'), humanLabels: { aspects: [], at } }, 'new')).toBe(false);
+    expect(isStale({ ...base, status: 'done', model: model('old') }, undefined)).toBe(false);
   });
 });
