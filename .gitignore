@@ -1,0 +1,4 @@
+# graphify's own cache (results live in graphify-out/*.json, *.html, *.md)
+graphify-out/cache/
+__pycache__/
+.DS_Store
