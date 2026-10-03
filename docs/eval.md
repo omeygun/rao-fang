@@ -13,19 +13,31 @@ Then run `python ml/eval.py`. No evaluation numbers have been produced yet; none
 
 ## Interim: synthetic dev split (not the headline number)
 
-Student trained 2026-10-03 on 1,055 synthetic items, scored on the 187-item synthetic dev split
-(Claude-written, same distribution as training, also used to tune the thresholds — so these numbers are optimistic).
-Thresholds tuned: τ_lo = 0.65, τ_hi = 0.70 (target precision-when-sure ≥ 0.85). Source: `ml/data/student_dev_report.json`.
+Student retrained 2026-10-03 on 1557 synthetic items (teacher v1 + balanced v2), scored on the
+275-item synthetic dev split (Claude-written, also used to tune thresholds — optimistic).
+Sentiment design: **polarity** — each aspect is routed to the clause that mentions it (`ml/clauses.py`) and judged by an
+untagged sentiment head. Thresholds τ_lo = 0.6, τ_hi = 0.65. Source: `ml/data/student_dev_report.json`.
 
-| Group | n | Aspect micro-F1 | Aspect macro-F1 | Sentiment acc. (n pairs) | Coverage | Precision when sure |
-|---|---|---|---|---|---|---|
-| all (fp32 encoder, Python) | 187 | 0.665 | 0.571 | 0.846 (136) | 0.540 | 0.952 |
-| all (app's q8 ONNX encoder) | 187 | 0.633 | — | — | 0.503 | 0.954 |
-| en | 54 | 0.678 | 0.560 | 0.878 (41) | 0.593 | 0.975 |
-| ko | 59 | 0.694 | 0.555 | 0.810 (42) | 0.475 | 1.000 |
-| zh | 54 | 0.654 | 0.603 | 0.800 (35) | 0.500 | 0.879 |
-| th | 20 (n < 30: indicative only) | 0.600 | 0.437 | 0.944 (18) | 0.700 | 0.944 |
+| Group | n | Aspect micro-F1 | Sentiment acc. (n pairs) | Counter-prior sentiment (n pairs) | Contrastive items (n pairs) | Coverage | Precision when sure |
+|---|---|---|---|---|---|---|---|
+| all (fp32, Python) | 275 | 0.809 | 0.723 (292) | 0.474 (95) | 0.688 (128) | 0.702 | 0.920 |
+| en | 77 | 0.778 | 0.805 (77) | 0.542 (24) | 0.806 (31) | 0.727 | 0.919 |
+| ko | 83 | 0.851 | 0.627 (83) | 0.367 (30) | 0.639 (36) | 0.699 | 0.948 |
+| th | 38 | 0.774 | 0.688 (48) | 0.588 (17) | 0.607 (28) | 0.632 | 0.868 |
+| zh | 77 | 0.820 | 0.762 (84) | 0.458 (24) | 0.697 (33) | 0.714 | 0.920 |
+| all (app's q8 ONNX encoder) | 275 | 0.798 | 0.743 (284) | 0.505 (93) | 0.728 (125) | 0.687 | 0.912 |
 
-The q8 row was computed by running the app's `Xenova/multilingual-e5-small` `model_quantized.onnx` with ONNX Runtime (Python),
-same mean pooling + L2 normalisation as `embed.ts` — not transformers.js itself. Quantisation lowers coverage (more items go to
-“not sure”) while precision-when-sure holds. The human test set result above, once it exists, is the number to quote.
+**Why it was retrained.** Teacher v1 data was skewed per aspect (walk_trail 0% positive in 169 mentions, logistics 97%
+negative, host 99% positive), and the v1 sentiment head learned those priors: “I loved the walk” → negative. Fixes: 590
+balanced teacher items with assigned (aspect, sentiment) targets (98.3% matched on blind re-label); clause routing; an
+untagged sentiment head. Same 275-item dev split, three designs compared:
+
+| Sentiment design | Sentiment acc. | Counter-prior | Contrastive |
+|---|---|---|---|
+| aspect-tagged, whole text (v1 design) | 0.682 | 0.379 | 0.500 |
+| aspect-tagged, routed clause | 0.716 | 0.358 | 0.625 |
+| **untagged, routed clause (shipped)** | **0.723** | **0.474** | **0.688** |
+
+Counter-prior = pairs whose gold sentiment is not the aspect's most common one in training (e.g. a positive walk). It is still
+the weakest number: the model reads the text better than before, but about half of “against the usual” opinions are still
+missed. Numbers are not comparable with the earlier v1 table (different, harder dev split, now including balanced items).

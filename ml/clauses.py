@@ -14,10 +14,15 @@ _CONTRAST = re.compile(
 )
 
 
+# Leading contrast word of a clause ("But, walking was fun" -> "walking was fun"): it signals the
+# contrast, not the clause's own sentiment, and in training it co-occurs mostly with "mixed".
+_LEAD = re.compile(r"^(?:(?:but|however|although|though|whereas)\b[\s,]*|但是|可是|不过|然而|但|하지만\s*|그런데\s*|그러나\s*|แต่ว่า|แต่)", re.IGNORECASE)
+
+
 def split_clauses(text: str) -> list[str]:
     out = []
     for sent in _SENT.split(text.strip()):
-        out += [c.strip(" ,，、") for c in _CONTRAST.split(sent)]
+        out += [_LEAD.sub("", c.strip(" ,，、")).strip(" ,，、") for c in _CONTRAST.split(sent)]
     return [c for c in out if len(c) >= 2] or [text.strip()]
 
 

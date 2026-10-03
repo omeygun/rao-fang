@@ -65,7 +65,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--data", nargs="+", default=[str(p) for p in (DATA / "synthetic.jsonl", DATA / "synthetic_balanced.jsonl") if p.exists()])
     ap.add_argument("--C", type=float, default=1.0)
-    ap.add_argument("--sentiment-mode", choices=["aspect", "clause", "polarity", "item"], default="aspect",
+    ap.add_argument("--sentiment-mode", choices=["aspect", "clause", "polarity", "item"], default="polarity",
                     help="aspect: head on 'query: {text} [aspect: {a}]' (spec); clause: same head on the clause that mentions "
                          "the aspect; polarity: untagged head on that clause; item: one item-level head (simplification)")
     ap.add_argument("--target-precision", type=float, default=0.85)

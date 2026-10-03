@@ -12,9 +12,12 @@ const CONTRAST = new RegExp(
 );
 
 const trim = (s: string) => s.replace(/^[\s,，、]+|[\s,，、]+$/g, '');
+// Leading contrast word ("But, walking was fun" -> "walking was fun"): it signals the contrast, not the
+// clause's own sentiment, and in training it co-occurs mostly with "mixed".
+const LEAD = /^(?:(?:but|however|although|though|whereas)\b[\s,]*|但是|可是|不过|然而|但|하지만\s*|그런데\s*|그러나\s*|แต่ว่า|แต่)/i;
 
 export function splitClauses(text: string): string[] {
-  const out = text.trim().split(SENT).flatMap((s) => s.split(CONTRAST).map(trim));
+  const out = text.trim().split(SENT).flatMap((s) => s.split(CONTRAST).map((c) => trim(trim(c).replace(LEAD, ''))));
   const kept = out.filter((c) => c.length >= 2);
   return kept.length ? kept : [text.trim()];
 }

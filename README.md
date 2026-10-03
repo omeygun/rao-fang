@@ -14,7 +14,7 @@ Spec: [`spec.md`](spec.md).
 | COOP/COEP headers (`vercel.json`, `public/_headers`), same-origin ONNX runtime, service-worker precache | ✅ `crossOriginIsolated === true` under `vite preview` |
 | DevBenchmark / DevParity pages | ✅ built; run in emulated Chrome (Pixel 7, offline, 4× CPU throttle) — see `docs/benchmarks.md`. **Not run on a real phone yet** |
 | ML pipeline (`ml/`): teacher, student, export, eval, km_eval, FLORES | ✅ code done; smoke-tested end-to-end with a fake embedder on throwaway fixtures |
-| `synthetic.jsonl` (1,242 items) and trained `heads.json` (61 KB) | ✅ generated with `claude-opus-5-5`, trained in 7.5 min on CPU; synthetic-dev micro-F1 0.665, 54% auto-classified at 95% precision (`docs/eval.md`) |
+| `synthetic.jsonl` (1,242) + `synthetic_balanced.jsonl` (590) and trained `heads.json` | ✅ teacher `claude-opus-5-5`; student retrained with balanced data and clause-level sentiment. Synthetic dev: aspect F1 0.809, 70% auto-classified at 92% precision, sentiment 0.72 (see `docs/eval.md`) |
 | Phase 0 numbers, model sizes | ❌ TODO on the phone (`docs/benchmarks.md`) |
 | Human test set, Kham Mueang pairs, Thai audio clips, tour photos, evidence citations | ❌ **[MANUAL]** — templates and scripts provided |
 
@@ -64,7 +64,8 @@ cd ml
 pip install -r requirements.txt
 export ANTHROPIC_API_KEY=...
 python gen_synthetic.py --model <claude-model-id> --workers 4   # → data/synthetic.jsonl (cached, resumable)
-python train_student.py                                         # → data/student.json, dev report, app/public/models/parity.json
+python gen_synthetic.py --model <claude-model-id> --balanced     # → data/synthetic_balanced.jsonl (assigned aspect/sentiment targets)
+python train_student.py --sentiment-mode polarity                # → data/student.json, dev report, app/public/models/parity.json
 python export_heads.py                                          # → app/public/models/heads.json
 # [MANUAL] write data/human_test.jsonl (see data/README.md), then:
 python eval.py                                                  # → docs/eval.md
