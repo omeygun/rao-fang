@@ -8,6 +8,8 @@ import { clipId, renderThai, T } from '../config/thai_templates';
 import { ASPECTS } from '../config/aspects';
 import type { FeedbackRec, RatingRec, VisitRec } from '../db/db';
 import cases from '../../../ml/data/km_normalize_cases.json';
+import clauseCases from '../../../ml/data/clause_cases.json';
+import { splitClauses } from '../ml/clauses';
 
 describe('kmNormalize', () => {
   // Test dictionary entries are made-up placeholders, not real Kham Mueang data.
@@ -97,6 +99,13 @@ describe('insights engine', () => {
     expect(ins.cards.find((c) => c.aspect === 'walk_trail')!.down).toBe(1);
     expect(ins.suggestions.n).toBe(1);
   });
+  it('counts a mixed opinion as a mention, not as both like and dislike', () => {
+    const v: VisitRec[] = [{ id: 'm1', at, lang: 'en', consentId: 'c' }];
+    const f = [fb('fm', 'm1', { model: { aspects: [{ aspect: 'scenery', p: 0.9, sentiment: 'mixed' }], suggestionP: 0, headsVersion: 't', at } })];
+    const c = buildInsights({ visits: v, ratings: [], feedback: f }, 'week', { tauHi: 0.6, weakEvidenceN: 3 }, now).cards[0];
+    expect([c.n, c.up, c.down]).toEqual([1, 0, 0]);
+    expect(renderThai(c.sentence)).toBe('แขก 1 คนพูดถึงวิวทิวทัศน์');
+  });
   it('has a separate purchase card', () => {
     expect(ins.buy.n).toBe(1);
     expect(ins.cards.some((c) => c.aspect === 'purchase_interest')).toBe(false);
@@ -117,5 +126,11 @@ describe('Teach Mode sentence swap', () => {
   it('returns null when the rest of the sentence changed or the word was deleted', () => {
     expect(alignSwap('แขกชอบชิมกาแฟ', 'ชอบ', 'คนฮฮฮชิมกาแฟ')).toBeNull();
     expect(alignSwap('แขกชอบชิมกาแฟ', 'ชอบ', 'แขกชิมกาแฟ')).toBeNull();
+  });
+});
+
+describe('clause splitter', () => {
+  it('matches the shared JS/Python cases', () => {
+    for (const c of clauseCases as { text: string; clauses: string[] }[]) expect(splitClauses(c.text)).toEqual(c.clauses);
   });
 });

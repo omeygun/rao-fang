@@ -52,6 +52,28 @@ def sentiment_accuracy(golds: list[dict], preds: list[dict]) -> dict:
     return {"n_pairs": n, "accuracy": ok / n if n else None}
 
 
+def aspect_majority(rows: list[dict]) -> dict:
+    """Most common gold sentiment per aspect (computed on training data)."""
+    c = {}
+    for r in rows:
+        for a in r["aspects"]:
+            c.setdefault(a["aspect"], Counter())[a["sentiment"]] += 1
+    return {a: v.most_common(1)[0][0] for a, v in c.items()}
+
+
+def counter_prior_accuracy(golds: list[dict], preds: list[dict], majority: dict) -> dict:
+    """Sentiment accuracy on (item, aspect) pairs whose gold sentiment differs from that aspect's
+    training majority (e.g. a positive walk). Catches a head that predicts the aspect, not the text."""
+    n = ok = 0
+    for g, p in zip(golds, preds):
+        ga = gold_aspects(g)
+        for a, s in p["aspects"].items():
+            if a in ga and ga[a] != majority.get(a):
+                n += 1
+                ok += s == ga[a]
+    return {"n_pairs": n, "accuracy": ok / n if n else None}
+
+
 def coverage_precision(golds: list[dict], preds: list[dict]) -> dict:
     """How often the tool says "not sure", and how right it is when it doesn't."""
     covered = [(g, p) for g, p in zip(golds, preds) if not p["unsure"]]

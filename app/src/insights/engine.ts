@@ -103,8 +103,9 @@ export function buildInsights(
     if (!m || m.size === 0) continue;
     let up = 0, down = 0;
     for (const s of m.values()) {
-      if (s.has('positive') || s.has('mixed')) up++;
-      if (s.has('negative') || s.has('mixed')) down++;
+      // A "mixed" opinion counts as a mention only: one ambivalent guest must not add both 👍 and 👎.
+      if (s.has('positive')) up++;
+      if (s.has('negative')) down++;
     }
     const n = m.size;
     const sentence = up && !down ? T.liked(up, aspect) : down && !up ? T.disliked(down, aspect) : up && down ? T.split(up, down, aspect) : T.mentioned(n, aspect);

@@ -127,8 +127,41 @@ def slots(lang: str, n_items: int, batch: int, rng: random.Random) -> list[dict]
     return out
 
 
+BALANCED_VERSION = "gen-v2-balanced"
+# Teacher v1 data was badly skewed per aspect (e.g. walk_trail 0% positive), so the student learned
+# "walk => negative" instead of reading the text. Balanced mode assigns explicit target labels.
+BAL_ASPECTS = [a for a in ASPECTS if a != "other"]
+
+
+def balanced_slots(lang: str, n_items: int, batch: int, rng: random.Random) -> list[dict]:
+    """Half single-aspect items with an assigned sentiment, half two-aspect items with opposite sentiments."""
+    def targets():
+        if rng.random() < 0.5:
+            a = rng.choice(BAL_ASPECTS)
+            opts = ["positive", "negative"] if a == "purchase_interest" else ["positive", "negative", "mixed"]
+            return [(a, rng.choices(opts, weights=[2, 2, 1][: len(opts)])[0])]
+        a, b = rng.sample(BAL_ASPECTS, 2)
+        sa = rng.choice(["positive", "negative"])
+        return [(a, sa), (b, "negative" if sa == "positive" else "positive")]
+    out = slots(lang, n_items, batch, rng)
+    for s in out:
+        for sp in s["specs"]:
+            sp.pop("twist")
+            sp["targets"] = targets()
+        s["prefix"], s["pv"] = "bal", BALANCED_VERSION
+    return out
+
+
+def spec_line(sp: dict) -> str:
+    if "targets" in sp:
+        t = ", ".join(f"{a} = {sent}" for a, sent in sp["targets"])
+        return (f"length: {sp['length']}; tone: {sp['tone']}; it must mention exactly these aspects with exactly these "
+                f"sentiments: {t}. State each opinion in its own words; mention no other aspect.")
+    return f"length: {sp['length']}; tone: {sp['tone']}; this item {sp['twist']}."
+
+
 def gen_prompt(s: dict) -> str:
-    lines = "\n".join(f"{j+1}. length: {sp['length']}; tone: {sp['tone']}; this item {sp['twist']}." for j, sp in enumerate(s["specs"]))
+    lines = "\n".join(f"{j+1}. {spec_line(sp)}" for j, sp in enumerate(s["specs"]))
     return f"""You are helping build a test-and-training set for a small on-device classifier.
 
 Context: a smallholder coffee farmer in the northern Thai highlands runs informal farm tours
@@ -197,7 +230,7 @@ def run_slot(teacher: Teacher, s: dict) -> tuple[list[dict], dict]:
     items = []
     for j, g in enumerate(gen):
         items.append({
-            "id": f"syn-{s['lang']}-{s['slot']:04d}-{j:02d}",
+            "id": f"{s.get('prefix', 'syn')}-{s['lang']}-{s['slot']:04d}-{j:02d}",
             "text": g["text"].strip(),
             "lang": s["lang"],
             "gen_aspects": g["aspects"],
@@ -214,13 +247,14 @@ def run_slot(teacher: Teacher, s: dict) -> tuple[list[dict], dict]:
         a1, a2 = norm_labels(it["gen_aspects"]), norm_labels(r["aspects"])
         if set(a1) == set(a2):
             st["aspect_set_agree"] += 1
-        if a1 == a2 and it["gen_is_suggestion"] == r["is_suggestion"]:
+        target = dict(it["spec"]["targets"]) if it["spec"] and "targets" in it["spec"] else None
+        if a1 == a2 and it["gen_is_suggestion"] == r["is_suggestion"] and (target is None or a2 == target):
             st["full_agree"] += 1
             row = {
                 "id": it["id"], "text": it["text"], "lang": it["lang"],
                 "aspects": [{"aspect": a, "sentiment": a2[a]} for a in ASPECTS if a in a2],
                 "is_suggestion": r["is_suggestion"],
-                "source": "synthetic-claude", "prompt_version": PROMPT_VERSION,
+                "source": "synthetic-claude", "prompt_version": s.get("pv", PROMPT_VERSION),
                 "teacher_model": teacher.model, "spec": it["spec"],
             }
             if not validate_row(row):
@@ -232,17 +266,22 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--model", required=True, help="Claude model id for the teacher (required; nothing is assumed)")
     ap.add_argument("--effort", default=None, help="optional output_config.effort, e.g. low (only on models that support it)")
-    ap.add_argument("--per-lang", default="en=450,zh=450,ko=450,th=150", help="items to generate per language")
+    ap.add_argument("--per-lang", default=None, help="items per language (default en=450,zh=450,ko=450,th=150; balanced: 160/160/160/120)")
+    ap.add_argument("--balanced", action="store_true", help="assigned (aspect, sentiment) targets to fix per-aspect label skew")
     ap.add_argument("--batch", type=int, default=10, help="items per generation call")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=13)
-    ap.add_argument("--out", default=str(DATA / "synthetic.jsonl"))
+    ap.add_argument("--out", default=None)
     args = ap.parse_args()
 
-    counts = {k: int(v) for k, v in (p.split("=") for p in args.per_lang.split(","))}
+    stem = "synthetic_balanced" if args.balanced else "synthetic"
+    args.out = args.out or str(DATA / f"{stem}.jsonl")
+    per_lang = args.per_lang or ("en=160,zh=160,ko=160,th=120" if args.balanced else "en=450,zh=450,ko=450,th=150")
+    counts = {k: int(v) for k, v in (p.split("=") for p in per_lang.split(","))}
     assert set(counts) <= set(LANGS), counts
     rng = random.Random(args.seed)
-    all_slots = [s for lang, n in counts.items() for s in slots(lang, n, args.batch, rng)]
+    make = balanced_slots if args.balanced else slots
+    all_slots = [s for lang, n in counts.items() for s in make(lang, n, args.batch, rng)]
     teacher = Teacher(args.model, args.effort)
 
     rows, stats, failed = [], {}, 0
@@ -274,14 +313,14 @@ def main():
     Path(args.out).write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows))
     tot = {k: sum(s[k] for s in stats.values()) for k in ("generated", "relabeled", "aspect_set_agree", "full_agree")}
     report = {
-        "teacher_model": args.model, "prompt_version": PROMPT_VERSION, "failed_batches": failed,
+        "teacher_model": args.model, "prompt_version": BALANCED_VERSION if args.balanced else PROMPT_VERSION, "failed_batches": failed,
         "per_lang": stats, "total": tot,
         "full_agreement_rate": tot["full_agree"] / tot["relabeled"] if tot["relabeled"] else None,
         "aspect_set_agreement_rate": tot["aspect_set_agree"] / tot["relabeled"] if tot["relabeled"] else None,
         "duplicates_dropped": n_before - len(rows),
         "kept": len(rows),
     }
-    (DATA / "synthetic_stats.json").write_text(json.dumps(report, indent=1, ensure_ascii=False))
+    (DATA / f"{stem}_stats.json").write_text(json.dumps(report, indent=1, ensure_ascii=False))
     print(json.dumps(report, indent=1, ensure_ascii=False))
     if failed:
         print(f"{failed} batches failed — re-run the same command to resume from cache.", file=sys.stderr)

@@ -31,6 +31,7 @@ class E5Embedder:
 
         self.model = SentenceTransformer(name, device="cpu")
         self.batch_size = batch_size
+        self._memo: dict[str, np.ndarray] = {}  # threshold tuning re-embeds the same dev texts many times
         # Verify the pipeline is mean pooling, as transformers.js uses pooling: "mean".
         pool = [m for m in self.model if m.__class__.__name__ == "Pooling"]
         cfg = pool[0].get_config_dict() if pool else {}
@@ -38,10 +39,12 @@ class E5Embedder:
 
     def embed(self, inputs: list[str]) -> np.ndarray:
         """`inputs` must already carry the "query: " prefix."""
-        return self.model.encode(
-            inputs, batch_size=self.batch_size, normalize_embeddings=True,
-            convert_to_numpy=True, show_progress_bar=len(inputs) > 500,
-        ).astype(np.float32)
+        new = list(dict.fromkeys(s for s in inputs if s not in self._memo))
+        if new:
+            vecs = self.model.encode(new, batch_size=self.batch_size, normalize_embeddings=True,
+                                     convert_to_numpy=True, show_progress_bar=len(new) > 500).astype(np.float32)
+            self._memo.update(zip(new, vecs))
+        return np.stack([self._memo[s] for s in inputs]) if inputs else np.zeros((0, DIM), np.float32)
 
 
 class FakeEmbedder:

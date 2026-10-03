@@ -11,6 +11,7 @@ from pathlib import Path
 
 import numpy as np
 
+from clauses import split_clauses
 from embedder import e5_aspect_input, e5_input
 from schema import ASPECTS, SENTIMENTS
 
@@ -93,8 +94,10 @@ class Student:
         S = self.suggestion_probs(X)
         out = []
         need = [(i, a) for i in range(len(rows)) for a in range(len(ASPECTS)) if P[i, a] >= hi]
-        if self.sentiment_mode == "aspect" and need:
-            XS = embedder.embed([e5_aspect_input(rows[i]["text"], ASPECTS[a]) for i, a in need])
+        if need and self.sentiment_mode in ("aspect", "clause", "polarity"):
+            src = self.route_clauses(rows, need, embedder) if self.sentiment_mode != "aspect" else {}
+            text = lambda i, a: src.get((i, a), rows[i]["text"])
+            XS = embedder.embed([e5_input(text(i, a)) if self.sentiment_mode == "polarity" else e5_aspect_input(text(i, a), ASPECTS[a]) for i, a in need])
         else:
             XS = np.stack([X[i] for i, _ in need]) if need else np.zeros((0, X.shape[1]), np.float32)
         SP = self.sentiment_probs(XS) if need else np.zeros((0, 3))
@@ -109,6 +112,20 @@ class Student:
                 "unsure": bool(reasons),
                 "reasons": reasons,
             })
+        return out
+
+    def route_clauses(self, rows: list[dict], need: list[tuple[int, int]], embedder) -> dict:
+        """(item, aspect) -> the clause whose aspect probability is highest (multi-clause items only)."""
+        parts = {i: split_clauses(rows[i]["text"]) for i, _ in need}
+        flat = [(i, c) for i, cs in parts.items() if len(cs) > 1 for c in cs]
+        if not flat:
+            return {}
+        P = self.aspect_probs(embedder.embed([e5_input(c) for _, c in flat]))
+        out = {}
+        for i, a in need:
+            ks = [k for k, (j, _) in enumerate(flat) if j == i]
+            if ks:
+                out[(i, a)] = flat[max(ks, key=lambda k: P[k, a])][1]
         return out
 
     def save(self, path: Path = STUDENT_PATH):

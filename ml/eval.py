@@ -13,7 +13,7 @@ import time
 from pathlib import Path
 
 from embedder import get_embedder
-from metrics import SMALL_N, SMALL_N_LABEL, aspect_scores, coverage_precision, fmt, n_label, sentiment_accuracy, top_errors
+from metrics import aspect_majority, counter_prior_accuracy, SMALL_N, SMALL_N_LABEL, aspect_scores, coverage_precision, fmt, n_label, sentiment_accuracy, top_errors
 from schema import validate_row
 from student import DATA, STUDENT_PATH, Student, load_jsonl
 
@@ -32,8 +32,9 @@ Then run `python ml/eval.py`. No evaluation numbers have been produced yet; none
 """
 
 
-def block(rows, preds):
-    return {"aspects": aspect_scores(rows, preds), "sentiment": sentiment_accuracy(rows, preds), "coverage": coverage_precision(rows, preds)}
+def block(rows, preds, majority):
+    return {"aspects": aspect_scores(rows, preds), "sentiment": sentiment_accuracy(rows, preds), "coverage": coverage_precision(rows, preds),
+            "counter_prior": counter_prior_accuracy(rows, preds, majority)}
 
 
 def main():
@@ -66,7 +67,10 @@ def main():
 
     langs = sorted({r["lang"] for r in rows})
     groups = {l: [i for i, r in enumerate(rows) if r["lang"] == l] for l in langs}
-    res = {"overall": block(rows, preds)} | {l: block([rows[i] for i in ix], [preds[i] for i in ix]) for l, ix in groups.items()}
+    # Majority sentiment per aspect in the training data: "counter-prior" pairs go against it (e.g. a positive walk).
+    train_files = [DATA / f for f in str(student.meta.get("data", "")).split("+") if (DATA / f).exists()]
+    majority = aspect_majority([r for f in train_files for r in load_jsonl(f)])
+    res = {"overall": block(rows, preds, majority)} | {l: block([rows[i] for i in ix], [preds[i] for i in ix], majority) for l, ix in groups.items()}
 
     dev_path = Path(args.student).parent / "student_dev_report.json"
     dev = json.loads(dev_path.read_text()) if dev_path.exists() else None
@@ -82,14 +86,16 @@ def main():
              "no claim that one language is better or worse, and no claim that the model works for that group.\n")
 
     L.append("## Aspects and sentiment\n")
-    L.append("| Group | n items | Aspect micro-F1 | Aspect macro-F1 | Micro P | Micro R | Sentiment acc. (n pairs) |")
-    L.append("|---|---|---|---|---|---|---|")
+    L.append("| Group | n items | Aspect micro-F1 | Aspect macro-F1 | Micro P | Micro R | Sentiment acc. (n pairs) | Counter-prior sentiment acc. (n pairs) |")
+    L.append("|---|---|---|---|---|---|---|---|")
     for name, b in res.items():
-        a, s = b["aspects"], b["sentiment"]
+        a, s, c = b["aspects"], b["sentiment"], b["counter_prior"]
         L.append(f"| {name} | {n_label(a['n'])} | {fmt(a['micro_f1'])} | {fmt(a['macro_f1'])} | {fmt(a['micro_p'])} | {fmt(a['micro_r'])} | "
-                 f"{fmt(s['accuracy'])} ({n_label(s['n_pairs'])}) |")
+                 f"{fmt(s['accuracy'])} ({n_label(s['n_pairs'])}) | {fmt(c['accuracy'])} ({n_label(c['n_pairs'])}) |")
     L.append("\nAspect F1 is computed on all items (as if no item were sent to the “not sure” queue). "
-             "Sentiment accuracy is over (item, aspect) pairs where the aspect is both predicted and in the gold labels.\n")
+             "Sentiment accuracy is over (item, aspect) pairs where the aspect is both predicted and in the gold labels. "
+             "Counter-prior: only pairs whose gold sentiment differs from that aspect's most common sentiment in the training data "
+             "(e.g. a positive walk) — a low value means the model predicts the aspect's usual sentiment instead of reading the text.\n")
 
     L.append("## Coverage vs. precision at the chosen thresholds\n")
     L.append("Coverage = share of items the tool classifies itself (not sent to “ไม่แน่ใจ / not sure”). "

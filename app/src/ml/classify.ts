@@ -5,6 +5,7 @@ import type { AspectPred, ModelOutput } from '../db/db';
 import { e5AspectInput, e5Input, embedPrefixed } from './embed';
 import { binaryProb, sentimentProbs, validateHeads, type HeadsFile } from './heads';
 import { uncertaintyReasons } from './uncertainty';
+import { splitClauses } from './clauses';
 
 let headsP: Promise<HeadsFile | null> | null = null;
 
@@ -34,8 +35,21 @@ export async function classify(text: string, lang: GuestLang): Promise<{ model?:
   const preds: AspectPred[] = probs.filter((q) => q.p >= th.tauLo).sort((a, b) => b.p - a.p);
   // Sentiment for each aspect at or above tauLo (shown for review; only ≥ tauHi are counted).
   if (preds.length) {
+    const mode = heads.sentimentMode;
+    // clause / polarity: judge each aspect on the clause where that aspect scores highest (mirrors Student.route_clauses).
+    const src = new Map<Aspect, string>();
+    const clauses = mode === 'clause' || mode === 'polarity' ? splitClauses(text) : [];
+    if (clauses.length > 1) {
+      const xc = await embedPrefixed(clauses.map(e5Input));
+      for (const p of preds) {
+        const scores = xc.map((v) => binaryProb(heads.aspects[p.aspect], v));
+        src.set(p.aspect, clauses[scores.indexOf(Math.max(...scores))]);
+      }
+    }
+    const input = (a: Aspect) => src.get(a) ?? text;
     const xs: ArrayLike<number>[] =
-      heads.sentimentMode === 'aspect' ? await embedPrefixed(preds.map((p) => e5AspectInput(text, p.aspect))) : preds.map(() => x);
+      mode === 'item' ? preds.map(() => x)
+      : await embedPrefixed(preds.map((p) => (mode === 'polarity' ? e5Input(input(p.aspect)) : e5AspectInput(input(p.aspect), p.aspect))));
     preds.forEach((p, i) => {
       const sp = sentimentProbs(heads.sentiment, xs[i]);
       const k = sp.indexOf(Math.max(...sp));

@@ -12,8 +12,11 @@ export interface HeadsFile {
   normalize: true;
   dim: number;
   aspects: Record<Aspect, BinaryHead>;
-  /** "aspect" = input is "query: {text} [aspect: {aspect}]"; "item" = one item-level head (simplification). */
-  sentimentMode: 'aspect' | 'item';
+  /**
+   * "aspect": "query: {text} [aspect: {aspect}]"; "clause": same, on the clause that mentions the aspect;
+   * "polarity": untagged "query: {clause}"; "item": one item-level head (simplification).
+   */
+  sentimentMode: 'aspect' | 'clause' | 'polarity' | 'item';
   sentiment: { classes: Sentiment[]; W: number[][]; b: number[] };
   suggestion: BinaryHead;
   thresholds: { tauHi: number; tauLo: number; tunedOn?: string };
