@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { alignSwap } from '../screens/Teach';
 import { normalizeKm } from '../ml/kmNormalize';
 import { scriptMatches, uncertaintyReasons, wordCount } from '../ml/uncertainty';
 import { binaryProb, sentimentProbs, softmax } from '../ml/heads';
@@ -105,4 +106,16 @@ describe('insights engine', () => {
     expect(buildInsights({ visits, ratings, feedback }, 'week', { tauHi: 0.6, weakEvidenceN: 3 }, new Date('2026-10-20')).guests).toBe(0);
   });
   it('schema has 13 aspects', () => expect(ASPECTS.length).toBe(13));
+});
+
+describe('Teach Mode sentence swap', () => {
+  // Placeholder strings, not real Kham Mueang.
+  it('extracts the swapped word when prefix and suffix are unchanged', () => {
+    expect(alignSwap('แขกชอบชิมกาแฟ', 'ชอบ', 'แขกฮฮฮชิมกาแฟ')).toBe('ฮฮฮ');
+    expect(alignSwap('กาแฟนี้อร่อยมาก', 'อร่อย', 'กาแฟนี้ฮฮมาก ')).toBe('ฮฮ');
+  });
+  it('returns null when the rest of the sentence changed or the word was deleted', () => {
+    expect(alignSwap('แขกชอบชิมกาแฟ', 'ชอบ', 'คนฮฮฮชิมกาแฟ')).toBeNull();
+    expect(alignSwap('แขกชอบชิมกาแฟ', 'ชอบ', 'แขกชิมกาแฟ')).toBeNull();
+  });
 });
