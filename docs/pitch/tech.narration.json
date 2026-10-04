@@ -1,0 +1,8 @@
+[
+ {"id": "t1", "text": "Here's how Rao Fang works, in one minute."},
+ {"id": "t2", "text": "Everything runs in the browser. Whisper tiny turns speech into text, a multilingual e5 model turns it into embeddings, and small linear heads pick the topics and sentiment. Results fill fixed Thai templates, so there's no generated text."},
+ {"id": "t3", "text": "To train it, Claude acted as the teacher, writing and labelling 1,832 guest comments in four languages, kept only when a blind re-check agreed. A small student learned from them on a CPU, in minutes."},
+ {"id": "t4", "text": "Anything uncertain goes to a person. On held-out synthetic data, that leaves sixty-nine percent sorted automatically, at ninety-one percent precision."},
+ {"id": "t5", "text": "It's an installable web app. The models download once, then it works in airplane mode, with all data kept on the device."},
+ {"id": "t6", "text": "So far, it's tested on synthetic data and an emulated phone. Next: a real phone, and real guests."}
+]

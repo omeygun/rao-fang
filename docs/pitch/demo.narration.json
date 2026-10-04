@@ -1,0 +1,7 @@
+[
+ {"id": "d1", "text": "Here's Rao Fang in one minute. A guest gives feedback, and the host learns what it means."},
+ {"id": "d2", "text": "At the end of the tour, the host hands over the phone. The guest picks a language, agrees to a short consent, rates each part of the tour, and leaves a comment. It all stays on the phone."},
+ {"id": "d3", "text": "Later, the host opens her insights, in Thai. How happy guests were, the best and worst part of the tour, and a card for each topic she can listen to. Every number opens the real comments, and anything unclear waits for her."},
+ {"id": "d4", "text": "She can also teach it her own dialect, Kham Mueang, by confirming or fixing starter words."},
+ {"id": "d5", "text": "Rao Fang works offline, on the phone she already has. Try it at rao-fang dot vercel dot app."}
+]

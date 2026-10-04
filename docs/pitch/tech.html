@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Rao Fang technical walkthrough</title><link rel="stylesheet" href="deck.css"></head>
+<body>
+
+<section class="slide dark" id="t1">
+  <div class="panel full"></div><div class="orb" style="width:1100px;height:1100px;right:-300px;top:-300px"></div>
+  <div class="kicker">Technical walkthrough · 60 seconds</div>
+  <p style="font-size:64px;font-weight:700;opacity:.85">เราฟัง</p>
+  <h1 class="xl">Rao Fang</h1>
+  <div class="rise"><p class="lead">On-device AI in a web app: no server, no signal needed.</p></div>
+</section>
+
+<section class="slide" id="t2">
+  <div class="panel bar" style="width:calc(100% * 2 / 6)"></div><div class="orb" style="width:900px;height:900px;right:-200px;bottom:-350px"></div>
+  <div class="wordmark">Rao Fang</div>
+  <div class="kicker">On the phone</div>
+  <h1>One pipeline, all in the browser.</h1>
+  <div class="flow rise">
+    <div class="node" style="view-transition-name:n1"><div class="lbl">Input</div><h3>Guest voice or text</h3><p>EN · 中文 · 한국어</p></div>
+    <div class="arr">→</div>
+    <div class="node" style="view-transition-name:n2"><div class="lbl">Speech → text</div><h3>Whisper tiny</h3><p>8-bit · 41.6 MB</p></div>
+    <div class="arr">→</div>
+    <div class="node" style="view-transition-name:n3"><div class="lbl">Text → meaning</div><h3>e5-small</h3><p>multilingual embeddings · 8-bit · 129 MB</p></div>
+    <div class="arr">→</div>
+    <div class="node hi" style="view-transition-name:n4"><div class="lbl">Classify</div><h3>Linear heads</h3><p>13 tour topics + liked / disliked</p></div>
+    <div class="arr">→</div>
+    <div class="node dk" style="view-transition-name:n5"><div class="lbl">Output</div><h3>Thai templates</h3><p>counts + real quotes, no generated text</p></div>
+  </div>
+  <div class="band late">transformers.js + ONNX Runtime (WebAssembly) — runs offline</div>
+</section>
+
+<section class="slide" id="t3">
+  <div class="panel bar" style="width:calc(100% * 3 / 6)"></div><div class="orb" style="width:900px;height:900px;left:-200px;bottom:-300px"></div>
+  <div class="wordmark">Rao Fang</div>
+  <div class="kicker">Training</div>
+  <h1>A big teacher, a small student.</h1>
+  <div class="flow rise">
+    <div class="node dk" style="view-transition-name:n1"><div class="lbl">Teacher</div><h3>Claude</h3><p>writes guest comments in 4 languages and labels them</p></div>
+    <div class="arr">→</div>
+    <div class="node" style="view-transition-name:n2"><div class="lbl">Data</div><h3>1,832 comments</h3><p>kept only if a blind re-label agreed</p></div>
+    <div class="arr">→</div>
+    <div class="node" style="view-transition-name:n3"><div class="lbl">Student</div><h3>e5-small + heads</h3><p>trained on a CPU in minutes</p></div>
+    <div class="arr">→</div>
+    <div class="node hi" style="view-transition-name:n4"><div class="lbl">Ship</div><h3 class="mono">heads.json</h3><p>runs on the phone</p></div>
+  </div>
+  <div class="band late">Sentiment is judged per clause: “loved the coffee, but the walk was steep”</div>
+</section>
+
+<section class="slide" id="t4">
+  <div class="panel bar" style="width:calc(100% * 4 / 6)"></div><div class="orb" style="width:1000px;height:1000px;left:300px;top:250px"></div>
+  <div class="wordmark">Rao Fang</div>
+  <div class="kicker">Fail safe</div>
+  <h1>Unsure? A person decides.</h1>
+  <div class="row" style="margin-top:64px;gap:80px;align-items:flex-start">
+    <div class="node hi" style="view-transition-name:n4;flex:1.2"><div class="lbl">Counted</div><h3>topic score ≥ 0.65</h3><p>thresholds tuned on a held-out dev split</p></div>
+    <div class="node" style="view-transition-name:n5;flex:1.6"><div class="lbl">Sent to “not sure”</div><h3>borderline 0.60–0.65 · no topic · under 3 words · wrong script</h3></div>
+  </div>
+  <div class="row rise" style="margin-top:56px;gap:120px">
+    <div style="view-transition-name:st1"><div class="stat brand" data-to="69" data-suf="%">69%</div><p class="statlbl">sorted automatically</p></div>
+    <div style="view-transition-name:st2"><div class="stat pos" data-to="91" data-suf="%">91%</div><p class="statlbl">precision on those</p></div>
+  </div>
+  <p class="note late">Held-out synthetic test set, n = 275, 8-bit model.</p>
+</section>
+
+<section class="slide" id="t5">
+  <div class="panel bar" style="width:calc(100% * 5 / 6)"></div><div class="orb" style="width:1000px;height:1000px;left:900px;top:150px"></div>
+  <div class="wordmark">Rao Fang</div>
+  <div class="kicker">Offline web app</div>
+  <h1>Install once, then airplane mode.</h1>
+  <div class="tiles rise" style="grid-template-columns:repeat(4,1fr)">
+    <div class="tile" style="view-transition-name:n1"><h3>PWA</h3><p>service worker caches the app shell</p></div>
+    <div class="tile" style="view-transition-name:n2"><h3>197 MB</h3><p>models downloaded once on Wi-Fi</p></div>
+    <div class="tile" style="view-transition-name:n3"><h3>COOP + COEP</h3><p>cross-origin isolated → multithreaded WebAssembly</p></div>
+    <div class="tile" style="view-transition-name:n4"><h3>IndexedDB</h3><p>all data on the device, nothing uploaded</p></div>
+  </div>
+  <p class="note late">Speech: 7.7 s for 11 s of audio in Chrome emulating a Pixel 7 at 4× slower CPU.</p>
+</section>
+
+<section class="slide dark" id="t6">
+  <div class="panel full"></div><div class="orb" style="width:1200px;height:1200px;right:-350px;bottom:-450px"></div>
+  <div class="wordmark" style="color:#fff">Rao Fang</div>
+  <div class="kicker">Next</div>
+  <h1>Tested on synthetic data and an emulated phone. Next: a real phone, real guests.</h1>
+  <div><span class="url pop">rao-fang.vercel.app</span></div>
+  <div class="foot" style="color:rgb(255 255 255 / .6)"><span>เราฟัง · Rao Fang — we listen</span><span>Narration: AI voice (ElevenLabs)</span></div>
+</section>
+
+<script src="deck.js"></script>
+</body>
+</html>

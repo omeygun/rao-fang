@@ -146,7 +146,7 @@ sentence is spoken with `speechSynthesis`; no Thai voice → the app shows how t
 
 ## Pitch video
 
-[`docs/pitch/rao-fang-pitch.mp4`](docs/pitch/rao-fang-pitch.mp4): 3½-minute narrated pitch for agritourism operators, with the live app recorded in a phone frame. Sources and how to rebuild: [`docs/pitch/README.md`](docs/pitch/README.md).
+[`docs/pitch/rao-fang-pitch.mp4`](docs/pitch/rao-fang-pitch.mp4): 3½-minute narrated pitch for agritourism operators, with the live app recorded in a phone frame. Also 1-minute videos: [product demo](docs/pitch/rao-fang-demo.mp4) and [technical walkthrough](docs/pitch/rao-fang-tech.mp4). Sources and how to rebuild: [`docs/pitch/README.md`](docs/pitch/README.md).
 
 ## Docs
 

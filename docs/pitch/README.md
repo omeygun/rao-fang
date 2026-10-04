@@ -10,6 +10,20 @@ loop; the “guest answers” card grows into the phone). Inside scenes, tiles a
 
 Audience: an agritourism company. Ask: approval for a real season with real hosts and guests.
 
+## Also: 1-minute product demo and technical walkthrough
+
+Same style, voice and build pipeline:
+
+- **[`rao-fang-demo.mp4`](rao-fang-demo.mp4)** (1:02) — almost all live app: an English guest gives feedback; the host's
+  Thai insights with the evidence sheet and “not sure” list; Teach Mode confirming starter Kham Mueang words.
+  Source: `demo.html`, `demo.narration.json`, `vo-demo/`.
+- **[`rao-fang-tech.mp4`](rao-fang-tech.mp4)** (1:08) — animated diagrams: the on-phone pipeline (Whisper tiny →
+  e5-small → linear heads → Thai templates), Claude-teacher / small-student training, the uncertainty rules
+  (counted at p ≥ 0.65; borderline 0.60–0.65, no topic, < 3 words or wrong script → “not sure”), and the offline web
+  stack (PWA, 197 MB models, COOP/COEP, IndexedDB). Source: `tech.html`, `tech.narration.json`, `vo-tech/`.
+
+Shared look: `deck.css` and `deck.js`. Build any of the three with `DECK=pitch|demo|tech` (see *Rebuild*).
+
 ## Scenes
 
 | # | Time | Slide | Key claim and its source |
@@ -35,7 +49,8 @@ Every metric on screen says how it was measured.
 ```bash
 cd app && npm run build && npx vite preview --port 4173 --host 127.0.0.1 &   # the app the recorder drives
 cd docs/pitch
-ELEVENLABS_API_KEY=… python3 tts.py     # only if narration.json changed: new clips + durations.json
+export DECK=pitch                       # or demo / tech
+ELEVENLABS_API_KEY=… python3 tts.py     # only if the narration text changed: new clips + durations
 P=$PWD node record.mjs                  # plays slides.html, drives the app in the phone frames → rec/raw.webm + timeline.json
 python3 mix.py                          # finds scene starts in video time, adds narration, encodes rao-fang-pitch.mp4
 ```

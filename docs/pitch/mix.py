@@ -2,7 +2,9 @@
 crop the strip away, encode H.264 + AAC."""
 import json, re, subprocess
 
-t = json.load(open("timeline.json"))
+from deck import OUT, TIMELINE, VO
+
+t = json.load(open(TIMELINE))
 info = subprocess.run(["ffmpeg", "-i", "rec/raw.webm", "-vf", "crop=256:12:0:1082,showinfo", "-f", "null", "-"],
                       capture_output=True, text=True).stderr
 frames = []
@@ -20,11 +22,11 @@ lead, end = starts[0], starts[0] + (t["total"] - t["scenes"][-1]["at"]) + (start
 print("scene starts (video s):", " ".join(f"{s - lead:.1f}" for s in starts))
 ins, filt = [], []
 for i, s in enumerate(t["scenes"]):
-    ins += ["-i", f"vo/{s['id']}.mp3"]
+    ins += ["-i", f"{VO}/{s['id']}.mp3"]
     ms = int((starts[i] - lead + 0.6) * 1000)
     filt.append(f"[{i + 1}:a]adelay={ms}|{ms}[a{i}]")
 mix = "".join(f"[a{i}]" for i in range(n)) + f"amix=inputs={n}:normalize=0,apad,loudnorm=I=-16:TP=-1.5:LRA=11,aresample=44100[aout]"
 subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-ss", f"{lead:.3f}", "-i", "rec/raw.webm", *ins,
                 "-filter_complex", "[0:v]crop=1920:1080:0:0[v];" + ";".join(filt) + ";" + mix, "-map", "[v]", "-map", "[aout]",
                 "-t", f"{end - lead:.3f}", "-c:v", "libx264", "-preset", "slow", "-crf", "20", "-pix_fmt", "yuv420p", "-r", "30",
-                "-ac", "2", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", "rao-fang-pitch.mp4"], check=True)
+                "-ac", "2", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", OUT], check=True)
