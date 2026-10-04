@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Rao Fang pitch</title>
+<style>
+@font-face { font-family: Plex; font-weight: 400; src: url(fonts/latin-400.woff2); }
+@font-face { font-family: Plex; font-weight: 600; src: url(fonts/latin-600.woff2); }
+@font-face { font-family: Plex; font-weight: 700; src: url(fonts/latin-700.woff2); }
+@font-face { font-family: Plex; font-weight: 400; src: url(fonts/thai-400.woff2); unicode-range: U+0E01-0E5B; }
+@font-face { font-family: Plex; font-weight: 700; src: url(fonts/thai-700.woff2); unicode-range: U+0E01-0E5B; }
+:root {
+  --bg: #fbf6ee; --bg-2: #f4ece0; --card: #fff; --ink: #2a1c11; --ink-2: rgb(42 28 17 / .78); --ink-3: rgb(42 28 17 / .58);
+  --brand: #5b3a1e; --brand-12: rgb(91 58 30 / .12); --pos: #0a8a7a; --neg: #c2551c; --line: #eadfce;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); color: var(--ink); font-family: Plex, sans-serif; }
+.slide { position: absolute; inset: 0; padding: 120px 140px 140px; opacity: 0; transition: opacity .6s ease; display: flex; flex-direction: column; }
+.slide { pointer-events: none; } .slide.on { opacity: 1; pointer-events: auto; }
+.kicker { font-size: 26px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--neg); margin-bottom: 28px; }
+h1 { font-size: 76px; line-height: 1.08; font-weight: 700; letter-spacing: -.01em; max-width: 1500px; }
+h1.xl { font-size: 150px; }
+.lead { font-size: 38px; line-height: 1.4; color: var(--ink-2); margin-top: 36px; max-width: 1400px; }
+.foot { position: absolute; left: 140px; right: 140px; bottom: 56px; display: flex; justify-content: space-between; font-size: 22px; color: var(--ink-3); }
+.foot b { color: var(--brand); font-weight: 600; }
+.note { font-size: 24px; color: var(--ink-3); margin-top: auto; line-height: 1.45; max-width: 1500px; }
+.dark { background: var(--brand); color: #fff; }
+.dark .lead, .dark .note { color: rgb(255 255 255 / .8); }
+.dark .kicker { color: #f3c98b; }
+.row { display: flex; gap: 40px; }
+.tiles { display: grid; gap: 32px; margin-top: 64px; }
+.tile { background: var(--card); border: 1px solid var(--line); border-radius: 32px; padding: 44px 44px 48px; box-shadow: 0 16px 40px rgb(91 58 30 / .08); font-size: 32px; line-height: 1.38; }
+.tile .n { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 20px; background: var(--brand); color: #fff; font-weight: 700; font-size: 32px; margin-bottom: 24px; }
+.tile h3 { font-size: 40px; font-weight: 700; margin-bottom: 14px; }
+.tile p { color: var(--ink-2); }
+.stat { font-size: 140px; white-space: nowrap; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+.stat.pos { color: var(--pos); } .stat.neg { color: var(--neg); } .stat.brand { color: var(--brand); }
+.statlbl { font-size: 32px; line-height: 1.35; color: var(--ink-2); margin-top: 18px; max-width: 460px; }
+.chips { display: flex; gap: 24px; margin-top: 64px; flex-wrap: wrap; }
+.chip { background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 22px 36px; font-size: 32px; }
+/* demo layout */
+.demo { flex-direction: row; gap: 100px; align-items: center; padding-top: 60px; padding-bottom: 100px; }
+.demo .text { flex: 1; }
+.demo h1 { font-size: 66px; }
+.steps { list-style: none; padding: 0; margin-top: 56px; display: grid; gap: 22px; }
+.steps li { font-size: 34px; color: var(--ink-3); padding-left: 56px; position: relative; transition: color .3s; }
+.steps li::before { content: ''; position: absolute; left: 0; top: 14px; width: 24px; height: 24px; border-radius: 50%; border: 3px solid var(--line); transition: all .3s; }
+.steps li.on { color: var(--ink); font-weight: 600; }
+.steps li.on::before { background: var(--pos); border-color: var(--pos); }
+.phone { width: 452px; height: 932px; border-radius: 64px; background: #1d140c; padding: 20px; box-shadow: 0 40px 80px rgb(42 28 17 / .28); flex: none; }
+.phone iframe, .phone img { width: 412px; height: 892px; border: 0; border-radius: 46px; display: block; background: var(--bg); object-fit: cover; object-position: top; }
+.tick li { font-size: 32px; line-height: 1.35; margin: 18px 0; list-style: none; padding-left: 52px; position: relative; }
+.tick li::before { position: absolute; left: 0; font-weight: 700; }
+.tick.done li::before { content: '✓'; color: var(--pos); }
+.tick.todo li::before { content: '○'; color: var(--neg); }
+.col h3 { font-size: 36px; margin-bottom: 12px; }
+.url { display: inline-block; margin-top: 56px; font-size: 52px; font-weight: 700; background: #fff; color: var(--brand); padding: 22px 44px; border-radius: 28px; }
+</style>
+</head>
+<body>
+
+<section class="slide dark" id="s1">
+  <div class="kicker">A pitch to agritourism operators</div>
+  <p style="font-size:64px;font-weight:700;opacity:.85">เราฟัง</p>
+  <h1 class="xl">Rao Fang</h1>
+  <p class="lead">Know what every foreign guest thought of your farm tour —<br>in Thai, offline, on the host's own phone.</p>
+  <div class="foot" style="color:rgb(255 255 255 / .6)"><span>“Rao fang” means “we listen”</span><span>rao-fang.vercel.app</span></div>
+</section>
+
+<section class="slide" id="s2">
+  <div class="kicker">The problem</div>
+  <h1>Foreign guests leave the farm.<br>What they thought leaves with them.</h1>
+  <div class="chips">
+    <span class="chip">Guests write in English, 中文, 한국어</span>
+    <span class="chip">Hosts read Thai — and think in Kham Mueang</span>
+    <span class="chip">Signal on the farm is weak or gone</span>
+  </div>
+  <p class="lead">So the host never learns which parts of the tour guests valued, what went wrong, or what they wanted to buy.</p>
+</section>
+
+<section class="slide" id="s3">
+  <div class="kicker">Meet Noor</div>
+  <h1>A coffee farmer in the hills of Chiang Rai who hosts foreign visitors on her farm.</h1>
+  <div class="row tiles" style="grid-template-columns:repeat(3,1fr);display:grid">
+    <div class="tile"><h3>6–7 a month</h3><p>foreign visitors walk the farm, pick cherries, roast and taste</p></div>
+    <div class="tile"><h3>Thai + Kham Mueang</h3><p>Thai is her written language; Northern Thai is how she thinks and talks</p></div>
+    <div class="tile"><h3>One Android phone</h3><p>no laptop, and patchy signal where the tour happens</p></div>
+  </div>
+  <p class="note">She wants to know which parts of the tour guests value — and what they would buy.</p>
+</section>
+
+<section class="slide" id="s4">
+  <div class="kicker">The product</div>
+  <h1>One loop, all on the phone.</h1>
+  <div class="tiles" style="grid-template-columns:repeat(3,1fr)">
+    <div class="tile"><span class="n">1</span><h3>The guest answers</h3><p>At the end of the tour, in their own language: 👍 / 👎 per tour step, then speak or type. Works offline.</p></div>
+    <div class="tile"><span class="n">2</span><h3>On-device AI sorts it</h3><p>Into 13 tour topics, liked or disliked — and flags anything it isn't sure about.</p></div>
+    <div class="tile"><span class="n">3</span><h3>The host reviews in Thai</h3><p>Weekly cards she can read or hear aloud, with the real guest comments behind every number.</p></div>
+  </div>
+  <p class="note" style="font-size:34px;color:var(--brand);font-weight:600">The AI suggests. The host decides.</p>
+</section>
+
+<section class="slide demo" id="s5">
+  <div class="text">
+    <div class="kicker">Live app · the guest</div>
+    <h1>The guest answers in their own language.</h1>
+    <ul class="steps" id="steps5">
+      <li>Picks 한국어 (Korean)</li>
+      <li>Agrees to a plain-language consent</li>
+      <li>Rates each tour step 👍 / 👎</li>
+      <li>Types what to improve — and what they'd buy</li>
+      <li>Hands the phone back. Nothing leaves it.</li>
+    </ul>
+  </div>
+  <div class="phone"><iframe id="f5" title="guest"></iframe></div>
+</section>
+
+<section class="slide demo" id="s6">
+  <div class="text">
+    <div class="kicker">Live app · the host</div>
+    <h1>The host gets insights she can check.</h1>
+    <ul class="steps" id="steps6">
+      <li>% positive, top strength, top problem</li>
+      <li>One card per tour topic with 👍 / 👎 counts</li>
+      <li>🔊 reads each card aloud in Thai</li>
+      <li>Every number opens the real guest comments</li>
+      <li>Unclear comments wait for a person</li>
+    </ul>
+    <p class="note" style="margin-top:56px">English captions are on for this demo — the host sees Thai only.<br>Sample data: real model outputs on held-out synthetic comments.</p>
+  </div>
+  <div class="phone"><iframe id="f6" title="insights"></iframe></div>
+</section>
+
+<section class="slide" id="s7">
+  <div class="kicker">Built to fail safe</div>
+  <h1>When it isn't sure, it asks a person.</h1>
+  <div class="row" style="margin-top:80px;gap:120px">
+    <div><div class="stat brand">69%</div><p class="statlbl">of comments sorted automatically</p></div>
+    <div><div class="stat pos">91%</div><p class="statlbl">of those sorted correctly</p></div>
+    <div><div class="stat neg">31%</div><p class="statlbl">go to a “not sure” list the host tags in two taps</p></div>
+  </div>
+  <p class="note">Measured on a held-out synthetic test set (n = 275), with the 8-bit model the app ships. Accuracy on real guest comments is not measured yet.</p>
+</section>
+
+<section class="slide" id="s8">
+  <div class="kicker">Offline by design</div>
+  <h1>Works in airplane mode, on phones hosts already own.</h1>
+  <div class="row" style="margin-top:80px;gap:120px">
+    <div><div class="stat brand">197 MB</div><p class="statlbl">one-time download on Wi-Fi — then no signal needed</p></div>
+    <div><div class="stat pos">7.7 s</div><p class="statlbl">to turn 11 s of guest speech into text, on the phone</p></div>
+    <div><div class="stat neg">0</div><p class="statlbl">bytes of guest data sent anywhere</p></div>
+  </div>
+  <p class="note">Speed measured in Chrome emulating a Pixel 7 with a 4× slower CPU; a real-phone benchmark is next. All data stays in the phone's storage.</p>
+</section>
+
+<section class="slide demo" id="s9">
+  <div class="text">
+    <div class="kicker">Local language</div>
+    <h1>It speaks the host's language — even the local one.</h1>
+    <ul class="tick done" style="margin-top:48px;padding:0">
+      <li>Insights are fixed Thai sentences filled with counts and real quotes — no AI-written text to go wrong</li>
+      <li>The host teaches it Kham Mueang words; her own notes are converted to standard Thai</li>
+      <li>38 starter words to confirm or correct — because dialects vary village to village</li>
+    </ul>
+  </div>
+  <div class="phone"><img src="starter.png" alt=""></div>
+</section>
+
+<section class="slide" id="s10">
+  <div class="kicker">For your company</div>
+  <h1>What it gives an agritourism operator</h1>
+  <div class="tiles" style="grid-template-columns:repeat(2,1fr)">
+    <div class="tile"><h3>Every host hears every guest</h3><p>Weekly, topic-level feedback — even when guest and host share no language.</p></div>
+    <div class="tile"><h3>Sales signals</h3><p>Guests who want to buy beans or products are counted, with their own words.</p></div>
+    <div class="tile"><h3>Early warnings</h3><p>Directions, group size, timing and price problems surface before they become reviews.</p></div>
+    <div class="tile"><h3>Nothing to run</h3><p>No servers, no data plans, no per-guest cost. A web link hosts install once.</p></div>
+  </div>
+</section>
+
+<section class="slide" id="s11">
+  <div class="kicker">Where it stands</div>
+  <h1>Built and live. Not yet proven with real guests.</h1>
+  <div class="row" style="margin-top:56px;gap:100px">
+    <div class="col" style="flex:1"><h3>Done</h3><ul class="tick done" style="padding:0">
+      <li>Live, installable web app that works offline</li>
+      <li>Guest flow in English, 中文, 한국어 (typing and speech)</li>
+      <li>On-device topic and sentiment model</li>
+      <li>Thai insights, real quotes, “not sure” list</li>
+      <li>Kham Mueang teach mode</li>
+    </ul></div>
+    <div class="col" style="flex:1"><h3>Next</h3><ul class="tick todo" style="padding:0">
+      <li>Airplane-mode test on a real Android phone</li>
+      <li>Accuracy on real guest comments</li>
+      <li>Recorded Thai audio and real tour photos</li>
+      <li>A season with real hosts</li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="slide dark" id="s12">
+  <div class="kicker">Our ask</div>
+  <h1>Approve Rao Fang for a real season — real hosts, real guests, measured results.</h1>
+  <div><span class="url">rao-fang.vercel.app</span></div>
+  <p class="lead">Open it on any phone or laptop and tap “Try the demo”.</p>
+  <div class="foot" style="color:rgb(255 255 255 / .6)"><span>เราฟัง · Rao Fang — we listen</span><span>Narration: AI voice (ElevenLabs)</span></div>
+</section>
+
+<script>
+window.show = (id) => { document.querySelectorAll('.slide').forEach((s) => s.classList.toggle('on', s.id === id)); };
+window.step = (list, i) => { document.querySelectorAll('#' + list + ' li').forEach((l, k) => l.classList.toggle('on', k <= i)); };
+</script>
+</body>
+</html>

@@ -144,6 +144,10 @@ Teach › *ตรวจคำเมืองตัวอย่าง* shows 38 w
 `app/public/audio/th/`, then `python scripts/gen_audio_script.py --scan` writes the manifest. Missing clips → the whole
 sentence is spoken with `speechSynthesis`; no Thai voice → the app shows how to install one.
 
+## Pitch video
+
+[`docs/pitch/rao-fang-pitch.mp4`](docs/pitch/rao-fang-pitch.mp4): 3½-minute narrated pitch for agritourism operators, with the live app recorded in a phone frame. Sources and how to rebuild: [`docs/pitch/README.md`](docs/pitch/README.md).
+
 ## Docs
 
 `docs/benchmarks.md` · `docs/eval.md` · `docs/km_eval.md` · `docs/datasets.md` · `docs/responsible_ai.md` · `docs/video_script.md`
