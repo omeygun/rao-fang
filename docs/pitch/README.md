@@ -1,7 +1,12 @@
 # Pitch video — Rao Fang for agritourism operators
 
-**[`rao-fang-pitch.mp4`](rao-fang-pitch.mp4)** — 3:34, 1920×1080, English, AI narration (ElevenLabs, voice “Matilda”;
+**[`rao-fang-pitch.mp4`](rao-fang-pitch.mp4)** — 3:39, 1920×1080, morph transitions, English, AI narration (ElevenLabs, voice “Matilda”;
 disclosed on the closing slide). Built with the `pitch-deck-builder` skill (`.claude/skills/pitch-deck-builder`).
+
+Motion: PowerPoint-style *Morph* built with the View Transitions API — elements that share a `view-transition-name`
+across slides glide and resize between scenes (the cover's “Rao Fang” shrinks into the corner wordmark; the brown cover
+collapses into a bottom progress bar and expands again for the ask; problem chips become Noor's cards, then the product
+loop; the “guest answers” card grows into the phone). Inside scenes, tiles and lists rise in sequence and stats count up.
 
 Audience: an agritourism company. Ask: approval for a real season with real hosts and guests.
 
@@ -32,8 +37,10 @@ cd app && npm run build && npx vite preview --port 4173 --host 127.0.0.1 &   # t
 cd docs/pitch
 ELEVENLABS_API_KEY=… python3 tts.py     # only if narration.json changed: new clips + durations.json
 P=$PWD node record.mjs                  # plays slides.html, drives the app in the phone frames → rec/raw.webm + timeline.json
-python3 mix.py                          # trims, adds narration, encodes rao-fang-pitch.mp4
+python3 mix.py                          # finds scene starts in video time, adds narration, encodes rao-fang-pitch.mp4
 ```
 
-`record.mjs` needs Playwright with Chromium. Edit text in `slides.html` and `narration.json`; scene length follows
+`record.mjs` needs Playwright with Chromium. Playwright's recorder drifts from wall-clock time under heavy animation, so
+the recorder flips the colour of a 16 px strip below the frame at each scene; `mix.py` reads scene starts from that
+strip, aligns the narration to them and crops the strip away. Edit text in `slides.html` and `narration.json`; scene length follows
 the narration clip + 2 s.
