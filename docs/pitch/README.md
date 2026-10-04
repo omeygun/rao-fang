@@ -16,16 +16,16 @@ Audience: an agritourism company. Ask: approval for a real season with real host
 |---|---|---|---|
 | 1 | 0:00 | Cover | — |
 | 2 | 0:16 | The problem | Guests write EN/ZH/KO; host reads Thai; weak signal (spec §1–2) |
-| 3 | 0:34 | Meet Noor | Chiang Rai, ~6–7 foreign visitors a month (spec §1) |
+| 3 | 0:35 | Meet Noor | Chiang Rai, ~6–7 foreign visitors a month (spec §1) |
 | 4 | 0:50 | One loop | Guest → on-device AI → Thai review; “the AI suggests, the host decides” |
-| 5 | 1:07 | **Live app: guest** | Real app recorded: Korean guest, consent, ratings, typed comment, thanks |
-| 6 | 1:26 | **Live app: host** | Real app recorded: demo insights with English captions, evidence sheet, “not sure” list |
-| 7 | 1:48 | Fail-safe | 69% auto-sorted, 91% precision — synthetic held-out set, n = 275, q8 model (`docs/eval.md`) |
-| 8 | 2:10 | Offline | 197 MB core download; 7.7 s for 11 s of speech in emulated Pixel 7 at 4× CPU throttle (`docs/benchmarks.md`) |
-| 9 | 2:27 | Local language | Fixed Thai templates; Kham Mueang teach mode; 38 starter words (`docs/datasets.md`) |
-| 10 | 2:45 | For your company | Benefits follow from the built features; no revenue or market numbers claimed |
-| 11 | 3:05 | Where it stands | Done vs. next, including what is not yet tested |
-| 12 | 3:18 | Ask | Approve a real season; rao-fang.vercel.app |
+| 5 | 1:08 | **Live app: guest** | Real app recorded: Korean guest, consent, ratings, typed comment, thanks |
+| 6 | 1:29 | **Live app: host** | Real app recorded: demo insights with English captions, evidence sheet, “not sure” list |
+| 7 | 1:52 | Fail-safe | 69% auto-sorted, 91% precision — synthetic held-out set, n = 275, q8 model (`docs/eval.md`) |
+| 8 | 2:14 | Offline | 197 MB core download; 7.7 s for 11 s of speech in emulated Pixel 7 at 4× CPU throttle (`docs/benchmarks.md`) |
+| 9 | 2:31 | Local language | Fixed Thai templates; Kham Mueang teach mode; 38 starter words (`docs/datasets.md`) |
+| 10 | 2:49 | For your company | Benefits follow from the built features; no revenue or market numbers claimed |
+| 11 | 3:10 | Where it stands | Done vs. next, including what is not yet tested |
+| 12 | 3:23 | Ask | Approve a real season; rao-fang.vercel.app |
 
 No market sizes, customer numbers or citations are used, because none have been sourced yet (spec: never invent them).
 Every metric on screen says how it was measured.
