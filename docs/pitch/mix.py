@@ -23,8 +23,8 @@ for i, s in enumerate(t["scenes"]):
     ins += ["-i", f"vo/{s['id']}.mp3"]
     ms = int((starts[i] - lead + 0.6) * 1000)
     filt.append(f"[{i + 1}:a]adelay={ms}|{ms}[a{i}]")
-mix = "".join(f"[a{i}]" for i in range(n)) + f"amix=inputs={n}:normalize=0,apad[aout]"
+mix = "".join(f"[a{i}]" for i in range(n)) + f"amix=inputs={n}:normalize=0,apad,loudnorm=I=-16:TP=-1.5:LRA=11,aresample=44100[aout]"
 subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-ss", f"{lead:.3f}", "-i", "rec/raw.webm", *ins,
                 "-filter_complex", "[0:v]crop=1920:1080:0:0[v];" + ";".join(filt) + ";" + mix, "-map", "[v]", "-map", "[aout]",
                 "-t", f"{end - lead:.3f}", "-c:v", "libx264", "-preset", "slow", "-crf", "20", "-pix_fmt", "yuv420p", "-r", "30",
-                "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", "rao-fang-pitch.mp4"], check=True)
+                "-ac", "2", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", "rao-fang-pitch.mp4"], check=True)
