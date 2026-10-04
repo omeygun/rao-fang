@@ -6,6 +6,39 @@ Noor reviews Thai insights built from counts, fixed templates and real quotes, w
 (Northern Thai) enters through Teach Mode and a personal dictionary that normalises Noor's notes to Central Thai.
 Spec: [`spec.md`](spec.md).
 
+## Live demo — **https://rao-fang.vercel.app**
+
+**Try it in 1 minute (laptop or phone):** open the link → **Try the demo**. Insights opens with sample data and
+English captions under the Thai, so you can follow it without reading Thai. Tap **EN** in the top bar to see what Noor
+sees (Thai only).
+
+| What you can do on the live site | How |
+|---|---|
+| See the weekly insights Noor gets: % positive, top strength / top problem, one card per tour topic with 👍/👎 counts | *Try the demo* → Insights; switch **This week / This month / All** |
+| See the evidence behind every number: the real guest comments, original language, and which topic + sentiment the model gave | tap **ดูความเห็นจริง / See real comments** on any card |
+| Hear an insight read aloud in Thai | 🔊 on any card (uses the phone's Thai voice until recorded clips exist) |
+| Review comments the model isn't sure about and tag them by hand | **ไม่แน่ใจ / Not sure** section at the bottom of Insights |
+| Leave feedback as a guest in English, 中文 or 한국어: consent → swipe 👍/👎 per tour step → type or speak a comment | Home → **ให้แขกรีวิว / Guest feedback** (voice needs the speech model, see below) |
+| Teach Kham Mueang: confirm 38 starter words, teach words with pictures, swap words in sentences, family helper mode | Home → **สอนภาษาเมือง / Teach** |
+| Write a private note in Kham Mueang; unknown words are highlighted and normalised to Central Thai | Insights → any card → notes |
+| Check if the phone is ready for airplane mode; download models; set a PIN; export or delete all data | ⚙️ Settings |
+| Run it fully offline | Install from Chrome's menu (*Install app*), download the core models in Settings on Wi-Fi (~200 MB), then switch on airplane mode |
+
+**Verified live (2026-10-04, Chrome emulating a Pixel 7):**
+- the page is cross-origin isolated (the COOP/COEP headers are served);
+- the service worker installs and the app opens with the network cut;
+- the demo loads with captions;
+- no page errors.
+
+On a laptop everything except the guest voice input works without downloading models; classifying new comments and
+voice need the models (Settings › download).
+
+**Not yet verified:** a run on a real Android phone (speed, microphone, Thai voice), real-guest accuracy (the numbers
+below are on synthetic data), recorded Thai audio, real tour photos. See *Status*.
+
+All data stays on the device (IndexedDB). Nothing is sent to a server; the only network traffic is downloading the app
+and models once.
+
 ## Screenshots
 
 | Landing (browser) | Home | Insights | Evidence sheet |
@@ -29,6 +62,8 @@ icons, View Transitions; axe-core reports 0 accessibility violations on all main
 
 | Part | Status |
 |---|---|
+| Live deployment ([rao-fang.vercel.app](https://rao-fang.vercel.app)) | ✅ auto-deploys from `main`; headers, offline install and demo checked on the live URL |
+| English presenter captions, landing page + sample data, starter Kham Mueang words (38, Noor confirms each) | ✅ built and live |
 | PWA: Guest Mode, Insights, not-sure queue + manual tags, Teach Mode (word / sentence swap / helper), notes with Kham Mueang normalisation, Settings, PIN, export, delete | ✅ built, typechecks, unit tests pass, flows smoke-tested in headless Chromium (without models) |
 | COOP/COEP headers (`vercel.json`, `public/_headers`), same-origin ONNX runtime, service-worker precache | ✅ `crossOriginIsolated === true` under `vite preview` |
 | DevBenchmark / DevParity pages | ✅ built; run in emulated Chrome (Pixel 7, offline, 4× CPU throttle) — see `docs/benchmarks.md`. **Not run on a real phone yet** |
