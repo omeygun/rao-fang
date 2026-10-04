@@ -9,7 +9,7 @@ const ids = JSON.parse(readFileSync(`${P}/${pre}narration.json`, 'utf8')).map((s
 const dur = JSON.parse(readFileSync(`${P}/${pre}durations.json`, 'utf8'));   // seconds per scene (from narration audio)
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const A = 'http://localhost:4173/', B = 'http://127.0.0.1:4173/';   // two origins = two separate app databases
-const frames = { pitch: { f5: A + '#/guest', f6: B }, demo: { fd2: A + '#/guest', fd3: B, fd4: A + '#/teach' }, tech: {} }[DECK];
+const frames = { pitch: { f5: A + '#/guest', f6: B }, demo: { fd2: A + '#/guest', fd3: B, fd4: A + '#/teach' }, tech: {}, intro: {} }[DECK];
 
 const b = await chromium.launch({ args: ['--disable-dev-shm-usage'] });
 // 16 px strip below the 1080p frame: its colour flips at each scene, so mix.py can find scene starts in video time.

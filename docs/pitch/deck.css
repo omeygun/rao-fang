@@ -82,3 +82,7 @@ h1.xl { view-transition-name: brand; font-size: 160px; }
 .arr { flex: none; width: 64px; display: grid; place-items: center; font-size: 40px; color: var(--ink-3); }
 .band { margin-top: 40px; padding: 22px 32px; border-radius: 20px; background: rgb(10 138 122 / .08); color: var(--pos); font-size: 28px; font-weight: 600; align-self: flex-start; }
 .mono { font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; font-size: .9em; }
+
+/* ---- Intro ---- */
+.avatar { view-transition-name: avatar; width: 200px; height: 200px; border-radius: 50%; display: grid; place-items: center; font-size: 96px; font-weight: 700; background: #f3c98b; color: var(--brand); margin-bottom: 48px; }
+.avatar.sm { width: 96px; height: 96px; font-size: 46px; margin-bottom: 36px; }
