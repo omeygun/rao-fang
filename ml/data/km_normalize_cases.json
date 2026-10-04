@@ -1,7 +1,56 @@
 [
-  {"note": "Synthetic placeholder strings for algorithm parity only; not Kham Mueang data.",
-   "text": "กขคกข", "dict": {"กขค": "หนึ่ง", "กข": "สอง"}, "expected": "หนึ่งสอง"},
-  {"text": "ฉันกขไป", "dict": {"กข": "สอง"}, "expected": "ฉันสองไป"},
-  {"text": "abc กขค", "dict": {"กข": "สอง"}, "expected": "abc สองค"},
-  {"text": "ไม่มีคำ", "dict": {}, "expected": "ไม่มีคำ"}
+ {
+  "note": "Synthetic placeholder strings for algorithm parity only; not Kham Mueang data.",
+  "text": "กขคกข",
+  "dict": {
+   "กขค": "หนึ่ง",
+   "กข": "สอง"
+  },
+  "expected": "หนึ่งสอง"
+ },
+ {
+  "text": "ฉันกขไป",
+  "dict": {
+   "กข": "สอง"
+  },
+  "expected": "ฉันสองไป"
+ },
+ {
+  "text": "abc กขค",
+  "dict": {
+   "กข": "สอง"
+  },
+  "expected": "abc สองค"
+ },
+ {
+  "text": "ไม่มีคำ",
+  "dict": {},
+  "expected": "ไม่มีคำ"
+ },
+ {
+  "note": "Real Kham Mueang (starter list, sanook.com): longest match wins (จ๊าดลำ over ลำ).",
+  "text": "กาแฟจ๊าดลำ",
+  "dict": {
+   "ลำ": "อร่อย",
+   "จ๊าดลำ": "อร่อยมาก"
+  },
+  "expected": "กาแฟอร่อยมาก"
+ },
+ {
+  "text": "ขมแก๊กบ่ลำ",
+  "dict": {
+   "ขมแก๊ก": "ขมมาก",
+   "บ่": "ไม่",
+   "ลำ": "อร่อย"
+  },
+  "expected": "ขมมากไม่อร่อย"
+ },
+ {
+  "text": "เดินขึ้นดอยอิดหม้อยแต๊",
+  "dict": {
+   "อิดหม้อย": "เหนื่อย",
+   "แต๊": "จริง"
+  },
+  "expected": "เดินขึ้นดอยเหนื่อยจริง"
+ }
 ]

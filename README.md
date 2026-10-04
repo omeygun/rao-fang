@@ -99,6 +99,10 @@ python flores_eval.py                                           # optional → d
 
 Then open `#/dev/parity` on the phone: cosine between Python and browser embeddings must be > 0.99.
 
+## Starter Kham Mueang words
+
+Teach › *ตรวจคำเมืองตัวอย่าง* shows 38 words from a public list ([sanook.com](https://www.sanook.com/campus/1392241/)). Noor taps ✓ to keep each word, ✏️ to correct it or skip it. Only words she keeps go into her dictionary, because spellings and meanings vary by village. Words that are also common Central Thai words with another meaning (ท่า, หัน, จ้อง, เมิน…) are left out so her notes don't get garbled.
+
 ## Thai audio clips (spec §16.3)
 
 `python scripts/gen_audio_script.py` writes `scripts/audio_script.md` (55 clips). A Thai speaker records them into

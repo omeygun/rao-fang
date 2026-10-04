@@ -66,7 +66,7 @@ export interface KmDictEntry {
   /** Kham Mueang spelling (Thai script), the lookup key. */
   km: string;
   th: string;
-  source: 'word' | 'swap' | 'helper' | 'correction';
+  source: 'word' | 'swap' | 'helper' | 'correction' | 'starter';
   at: number;
 }
 export interface KmPairRec {

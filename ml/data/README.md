@@ -8,7 +8,8 @@
 | `human_test.jsonl` | **[MANUAL]** people | test only — never training, never threshold tuning | yes |
 | `km_pairs.jsonl` | **[MANUAL]** Noor's family via Teach Mode export | Kham Mueang dictionary + held-out eval | only with their consent |
 | `student.json`, `student_dev_report.json` | `train_student.py` | export + dev metrics | yes |
-| `km_normalize_cases.json` | hand-written algorithm cases (placeholder strings) | JS ↔ Python parity tests | yes |
+| `km_normalize_cases.json` | hand-written algorithm cases (placeholders + 3 real Kham Mueang cases from the starter list) | JS ↔ Python parity tests | yes |
+| `../../app/src/config/km_starter.json` | 38 Kham Mueang words from [sanook.com](https://www.sanook.com/campus/1392241/) | starter suggestions Noor confirms or fixes in Teach (never used unconfirmed) | yes (word list, credited) |
 
 ## Writing `human_test.jsonl` [MANUAL]
 

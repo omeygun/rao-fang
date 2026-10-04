@@ -4,12 +4,12 @@ import teachWords from '../config/teach_words.json';
 import teachSentences from '../config/teach_sentences.json';
 import { db, getSetting, setSetting, uid, type KmDictEntry } from '../db/db';
 import { TopBar } from '../components/TopBar';
-import { En } from '../components/ui';
+import starter from '../config/km_starter.json';
 import { speakTextThai } from '../audio/speak';
 import { NO_VOICE_TH } from '../components/Speak';
 import { go } from '../nav';
 import { ChevronRight } from 'lucide-react';
-import { haptic, toast } from '../components/ui';
+import { En, haptic, toast } from '../components/ui';
 
 const TEACH_CONSENT = 'teach-v1';
 const HELPER_CONSENT = 'helper-minor-v1';
@@ -49,12 +49,14 @@ export function Teach({ route }: { route: string }) {
   if (route.startsWith('/teach/swap')) return <SwapMode />;
   if (route.startsWith('/teach/helper')) return <HelperMode />;
   if (route.startsWith('/teach/dict')) return <DictView />;
+  if (route.startsWith('/teach/starter')) return <StarterMode />;
   return (
     <main className="screen">
       <TopBar title="สอนภาษาเมือง" en="Teach Kham Mueang (Northern Thai)" />
       <TeachProgress />
       <nav className="big-buttons stagger">
         <a className="big hero" href="#/teach/word"><span className="tile">🔤</span><span className="grow">สอนคำ<small>ดูรูปกับคำไทย แล้วพิมพ์เป็นคำเมือง</small><En>Teach a word — see a picture, type it in Kham Mueang</En></span><ChevronRight aria-hidden /></a>
+        <a className="big" href="#/teach/starter"><span className="tile">✅</span><span className="grow">ตรวจคำเมืองตัวอย่าง<small>คำจากเว็บ {starter.words.length} คำ กด ✓ ถ้าใช่ แก้ถ้าไม่ใช่</small><En>Check starter words — confirm or fix words from the web</En></span><ChevronRight aria-hidden /></a>
         <a className="big" href="#/teach/swap"><span className="tile">🔁</span><span className="grow">เปลี่ยนคำในประโยค<small>เปลี่ยนคำที่ไฮไลต์เป็นคำเมือง</small><En>Swap the highlighted word into Kham Mueang</En></span><ChevronRight aria-hidden /></a>
         <a className="big" href="#/teach/helper"><span className="tile">👧</span><span className="grow">ลูกช่วยแปล<small>แม่พิมพ์คำเมือง ลูกพิมพ์ภาษาไทย</small><En>Mum types Kham Mueang, child types standard Thai</En></span><ChevronRight aria-hidden /></a>
         <a className="big" href="#/teach/dict"><span className="tile">📖</span><span className="grow">พจนานุกรมของฉัน<small>ดู แก้ หรือลบคำที่สอนไว้</small><En>My dictionary — view, edit, delete</En></span><ChevronRight aria-hidden /></a>
@@ -153,6 +155,55 @@ function WordMode({ q }: { q: URLSearchParams }) {
         {!prefillKm && <button onClick={() => { setKm(''); setI(i + 1); }}>ข้าม</button>}
       </div>
       {saved > 0 && <p className="muted">สอนแล้ว {saved} คำ 🎉</p>}
+    </main>
+  );
+}
+
+/** Starter Kham Mueang words from a public list: Noor confirms or corrects each before the app uses it. */
+function StarterMode() {
+  const [todo, setTodo] = useState<typeof starter.words | null>(null);
+  const [th, setTh] = useState('');
+  const [editing, setEditing] = useState(false);
+  useEffect(() => {
+    (async () => {
+      const have = new Set((await (await db()).getAllKeys('km_dictionary')) as string[]);
+      setTodo(starter.words.filter((w) => !have.has(w.km)));
+    })();
+  }, []);
+  if (!todo) return null;
+  const w = todo[0];
+  const next = () => { setEditing(false); setTh(''); setTodo(todo.slice(1)); };
+  const keep = async (thai: string) => {
+    await addToDict(w.km, thai, 'starter');
+    haptic(18);
+    toast(`บันทึกแล้ว ✓ ${w.km} = ${thai.trim()}`);
+    next();
+  };
+  return (
+    <main className="screen">
+      <TopBar title="ตรวจคำเมืองตัวอย่าง" en="Check starter words" back="#/teach" />
+      {!w ? (
+        <p className="sentence">ตรวจครบแล้ว 🎉<En>All starter words checked</En></p>
+      ) : (
+        <>
+          <p className="muted small">เหลือ {todo.length} คำ · จาก <a href={starter.source} target="_blank" rel="noreferrer">sanook.com</a> — แต่ละหมู่บ้านอาจพูดต่างกัน<En>{todo.length} left · from a public word list — dialects vary by village</En></p>
+          <p className="word-card" key={w.km}>{w.km} = {w.th}</p>
+          <En>{w.en}</En>
+          <p>ที่บ้านคุณ คำนี้แปลแบบนี้ใช่ไหม?<En>Is this what it means where you live?</En></p>
+          {editing ? (
+            <div className="row">
+              <input value={th} autoFocus placeholder="ภาษาไทยกลางที่ถูก" aria-label="ภาษาไทยกลางที่ถูก" onChange={(e) => setTh(e.target.value)} />
+              <button className="primary" disabled={!th.trim()} onClick={() => keep(th)}>บันทึก</button>
+            </div>
+          ) : (
+            <div className="row">
+              <button className="primary" onClick={() => keep(w.th)}>✓ ใช่</button>
+              <button onClick={() => { setTh(w.th); setEditing(true); }}>✏️ แก้</button>
+              <button onClick={next}>ข้าม</button>
+            </div>
+          )}
+        </>
+      )}
     </main>
   );
 }
