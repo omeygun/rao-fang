@@ -5,18 +5,18 @@ import { BarChart3, Home, Languages, Settings } from 'lucide-react';
 export const haptic = (ms = 12) => { try { navigator.vibrate?.(ms); } catch { /* not supported */ } };
 
 const NAV = [
-  { href: '#/', match: (r: string) => r === '/', label: 'หน้าแรก', Icon: Home },
-  { href: '#/insights', match: (r: string) => r.startsWith('/insights'), label: 'ดูสรุป', Icon: BarChart3 },
-  { href: '#/teach', match: (r: string) => r.startsWith('/teach'), label: 'สอนคำ', Icon: Languages },
-  { href: '#/settings', match: (r: string) => r.startsWith('/settings') || r.startsWith('/dev'), label: 'ตั้งค่า', Icon: Settings },
+  { href: '#/', match: (r: string) => r === '/', label: 'หน้าแรก', en: 'Home', Icon: Home },
+  { href: '#/insights', match: (r: string) => r.startsWith('/insights'), label: 'ดูสรุป', en: 'Insights', Icon: BarChart3 },
+  { href: '#/teach', match: (r: string) => r.startsWith('/teach'), label: 'สอนคำ', en: 'Teach', Icon: Languages },
+  { href: '#/settings', match: (r: string) => r.startsWith('/settings') || r.startsWith('/dev'), label: 'ตั้งค่า', en: 'Settings', Icon: Settings },
 ];
 
 export function BottomNav({ route }: { route: string }) {
   return (
     <nav className="bottom-nav" aria-label="เมนูหลัก">
-      {NAV.map(({ href, match, label, Icon }) => (
+      {NAV.map(({ href, match, label, en, Icon }) => (
         <a key={href} href={href} className={match(route) ? 'on' : ''} aria-current={match(route) ? 'page' : undefined}>
-          <Icon aria-hidden /> {label}
+          <Icon aria-hidden /> {label}<En>{en}</En>
         </a>
       ))}
     </nav>
@@ -79,4 +79,31 @@ export function CountUp({ value, suffix = '' }: { value: number; suffix?: string
     return () => cancelAnimationFrame(raf);
   }, [value]);
   return <>{v}{suffix}</>;
+}
+
+// ---------- Presenter captions: small English lines under Noor's Thai UI, for demos to non-Thai audiences ----------
+const CAPTIONS_KEY = 'raofang.captions';
+const captionListeners = new Set<(on: boolean) => void>();
+const readCaptions = () => { try { return localStorage.getItem(CAPTIONS_KEY) === '1'; } catch { return false; } };
+export function setCaptions(on: boolean) {
+  try { localStorage.setItem(CAPTIONS_KEY, on ? '1' : '0'); } catch { /* private mode */ }
+  captionListeners.forEach((l) => l(on));
+}
+export function useCaptions(): boolean {
+  const [on, setOn] = useState(readCaptions);
+  useEffect(() => { captionListeners.add(setOn); return () => { captionListeners.delete(setOn); }; }, []);
+  return on;
+}
+/** English caption, rendered only when presenter captions are on. Thai stays the primary text. */
+export function En({ children, block = true }: { children: ReactNode; block?: boolean }) {
+  return useCaptions() && children ? <span className={'en' + (block ? ' block' : '')} lang="en">{children}</span> : null;
+}
+export function CaptionToggle() {
+  const on = useCaptions();
+  return (
+    <button className={'chip caption-toggle' + (on ? ' on' : '')} aria-pressed={on} onClick={() => { haptic(); setCaptions(!on); }}
+      title="English captions for presenting">
+      EN
+    </button>
+  );
 }

@@ -12,6 +12,12 @@ Spec: [`spec.md`](spec.md).
 |---|---|---|---|
 | ![](docs/screenshots/landing.png) | ![](docs/screenshots/home.png) | ![](docs/screenshots/insights.png) | ![](docs/screenshots/sheet.png) |
 
+**English presenter captions** (tap **EN** in the top bar; on automatically from the landing page's *Try the demo*). Captions are the exact English of each fixed Thai template, not a translation, so what an English-speaking audience reads is what Noor hears:
+
+| Home + captions | Insights + captions |
+|---|---|
+| ![](docs/screenshots/home-captions.png) | ![](docs/screenshots/insights-captions.png) |
+
 Guest flow (language → consent → swipe ratings → voice → thanks):
 ![](docs/screenshots/guest-flow.png)
 

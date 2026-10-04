@@ -1,7 +1,7 @@
 // Insights for Noor (spec §6.4). Counts + fixed Thai templates + real quotes only.
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ASPECT_INFO, SENTIMENT_TH, type Aspect } from '../config/aspects';
-import { renderThai, T, type Frag } from '../config/thai_templates';
+import { renderEnglish, renderThai, T, type Frag } from '../config/thai_templates';
 import { db, type FeedbackRec, type NoteRec, type RatingRec, type VisitRec } from '../db/db';
 import { buildInsights, type Evidence, type Period } from '../insights/engine';
 import { loadHeads, thresholdsFrom } from '../ml/classify';
@@ -14,10 +14,10 @@ import { AspectPicker } from '../components/AspectPicker';
 import { NoteEditor } from '../components/NoteEditor';
 import { G } from '../i18n/guest';
 import { AlertTriangle, CheckCircle2, ChevronRight, Loader2, Sparkles, ThumbsDown, ThumbsUp } from 'lucide-react';
-import { CountUp, Sheet, haptic, toast } from '../components/ui';
+import { CountUp, En, Sheet, haptic, toast } from '../components/ui';
 import { clearDemo } from '../demo';
 
-const PERIODS: [Period, string][] = [['week', 'สัปดาห์นี้'], ['month', 'เดือนนี้'], ['all', 'ทั้งหมด']];
+const PERIODS: [Period, string, string][] = [['week', 'สัปดาห์นี้', 'This week'], ['month', 'เดือนนี้', 'This month'], ['all', 'ทั้งหมด', 'All']];
 
 export function Insights() {
   const [period, setPeriod] = useState<Period>('week');
@@ -43,7 +43,7 @@ export function Insights() {
   const ins = useMemo(() => (data ? buildInsights(data, period, th) : null), [data, period, th]);
   const byId = useMemo(() => new Map(data?.feedback.map((f) => [f.id, f]) ?? []), [data]);
   const close = useCallback(() => setOpen(null), []);
-  if (!ins || !data) return <main className="screen"><TopBar title="ดูสรุป" /><div className="skeleton" /><div className="skeleton" /></main>;
+  if (!ins || !data) return <main className="screen"><TopBar title="ดูสรุป" en="Insights" /><div className="skeleton" /><div className="skeleton" /></main>;
 
   const empty = ins.cards.length === 0 && ins.unsure.length === 0 && ins.buy.n === 0;
   const demo = data.visits.some((v) => v.demo);
@@ -51,7 +51,7 @@ export function Insights() {
   const sheetEvidence = open === 'buy' ? ins.buy.evidence : open === 'sug' ? ins.suggestions.evidence : sheetCard?.evidence;
   return (
     <main className="screen insights">
-      <TopBar title="ดูสรุป" />
+      <TopBar title="ดูสรุป" en="Insights" />
       {demo && (
         <p className="badge demo" style={{ marginBottom: 12 }}>
           <Sparkles aria-hidden /> ข้อมูลตัวอย่าง (sample data)
@@ -59,8 +59,10 @@ export function Insights() {
         </p>
       )}
       <div className="segmented" role="tablist">
-        {PERIODS.map(([p, label]) => (
-          <button key={p} role="tab" aria-selected={p === period} className={p === period ? 'on' : ''} onClick={() => { haptic(); setPeriod(p); }}>{label}</button>
+        {PERIODS.map(([p, label, en]) => (
+          <button key={p} role="tab" aria-selected={p === period} className={p === period ? 'on' : ''} onClick={() => { haptic(); setPeriod(p); }}>
+            <span>{label}<En>{en}</En></span>
+          </button>
         ))}
       </div>
       {pending && <p className="muted small"><Loader2 className="spin" aria-hidden /> กำลังจัดหมวดความเห็นใหม่…</p>}
@@ -68,7 +70,7 @@ export function Insights() {
       {empty ? (
         <section className="card empty">
           <p className="art">🌱</p>
-          <p className="sentence">{renderThai(T.noData())}</p>
+          <p className="sentence">{renderThai(T.noData())}<En>{renderEnglish(T.noData())}</En></p>
           <a className="chip on" href="#/guest">🧳 ให้แขกรีวิว</a>
         </section>
       ) : (
@@ -77,13 +79,13 @@ export function Insights() {
 
       <div className="stagger">
         {ins.buy.n > 0 && (
-          <Card icon="🛍️" title="แขกอยากซื้อ" frags={ins.buy.sentence} weak={ins.buy.weak} onTap={() => setOpen('buy')} />
+          <Card icon="🛍️" title="แขกอยากซื้อ" en="Want to buy" frags={ins.buy.sentence} weak={ins.buy.weak} onTap={() => setOpen('buy')} />
         )}
         {ins.suggestions.n > 0 && (
-          <Card icon="💡" title="ข้อเสนอแนะ" frags={ins.suggestions.sentence} onTap={() => setOpen('sug')} />
+          <Card icon="💡" title="ข้อเสนอแนะ" en="Suggestions" frags={ins.suggestions.sentence} onTap={() => setOpen('sug')} />
         )}
         {ins.cards.map((c) => (
-          <Card key={c.aspect} icon={ASPECT_INFO[c.aspect].icon} title={ASPECT_INFO[c.aspect].th} frags={c.sentence} weak={c.weak}
+          <Card key={c.aspect} icon={ASPECT_INFO[c.aspect].icon} title={ASPECT_INFO[c.aspect].th} en={ASPECT_INFO[c.aspect].en} frags={c.sentence} weak={c.weak}
             counts={{ up: c.up, down: c.down, n: c.n }} onTap={() => setOpen(c.aspect)} />
         ))}
       </div>
@@ -92,18 +94,19 @@ export function Insights() {
         <section className="card unsure">
           <div className="card-head">
             <span className="tile">❓</span>
-            <h2>ไม่แน่ใจ — ให้คนช่วยดู</h2>
+            <h2>ไม่แน่ใจ — ให้คนช่วยดู<En>Not sure — ask a person</En></h2>
             <SpeakButton frags={ins.unsureSentence} />
           </div>
-          <p className="sentence">{renderThai(ins.unsureSentence)}</p>
+          <p className="sentence">{renderThai(ins.unsureSentence)}<En>{renderEnglish(ins.unsureSentence)}</En></p>
           {ins.unsure.map((f) => <UnsureItem key={f.id} f={f} onChanged={reload} />)}
         </section>
       ) : (
-        !empty && <p className="muted small"><CheckCircle2 aria-hidden /> ไม่มีความเห็นที่ต้องให้คนช่วยดู</p>
+        !empty && <p className="muted small"><CheckCircle2 aria-hidden /> ไม่มีความเห็นที่ต้องให้คนช่วยดู <En block={false}>— nothing needs a person's check</En></p>
       )}
 
       <Sheet open={!!open} onClose={close}
-        title={open === 'buy' ? '🛍️ แขกอยากซื้อ' : open === 'sug' ? '💡 ข้อเสนอแนะ' : sheetCard ? `${ASPECT_INFO[sheetCard.aspect].icon} ${ASPECT_INFO[sheetCard.aspect].th}` : ''}>
+        title={<>{open === 'buy' ? '🛍️ แขกอยากซื้อ' : open === 'sug' ? '💡 ข้อเสนอแนะ' : sheetCard ? `${ASPECT_INFO[sheetCard.aspect].icon} ${ASPECT_INFO[sheetCard.aspect].th}` : ''}
+          <En>{open === 'buy' ? 'Want to buy' : open === 'sug' ? 'Suggestions' : sheetCard ? `${ASPECT_INFO[sheetCard.aspect].en} — real guest comments` : ''}</En></>}>
         {sheetEvidence && <Drawer evidence={sheetEvidence} byId={byId} onChanged={reload} />}
         {sheetCard && <Notes aspect={sheetCard.aspect} notes={data.notes} onChanged={reload} />}
         <DecideFooter />
@@ -128,20 +131,20 @@ function Summary({ ins }: { ins: ReturnType<typeof buildInsights> }) {
       </div>
       <div>
         <div className="big-num"><CountUp value={ins.guests} /></div>
-        <div className="lbl">แขกในช่วงนี้ · {up + down ? `👍 ${up} · 👎 ${down}` : 'ยังไม่มีคะแนน'}</div>
+        <div className="lbl">แขกในช่วงนี้ · {up + down ? `👍 ${up} · 👎 ${down}` : 'ยังไม่มีคะแนน'}<En>guests in this period · {pct}% of ratings positive</En></div>
       </div>
       {(best || worst) && (
         <div className="highlights">
-          {best && <div className="hl"><ThumbsUp aria-hidden /> <span className="grow">{renderThai(best.sentence)}</span><SpeakButton frags={best.sentence} /></div>}
-          {worst && <div className="hl"><ThumbsDown aria-hidden /> <span className="grow">{renderThai(worst.sentence)}</span><SpeakButton frags={worst.sentence} /></div>}
+          {best && <div className="hl"><ThumbsUp aria-hidden /> <span className="grow">{renderThai(best.sentence)}<En>Top strength: {renderEnglish(best.sentence)}</En></span><SpeakButton frags={best.sentence} /></div>}
+          {worst && <div className="hl"><ThumbsDown aria-hidden /> <span className="grow">{renderThai(worst.sentence)}<En>Top problem: {renderEnglish(worst.sentence)}</En></span><SpeakButton frags={worst.sentence} /></div>}
         </div>
       )}
     </section>
   );
 }
 
-function Card({ icon, title, frags, weak, counts, onTap }: {
-  icon: string; title: string; frags: Frag[]; weak?: boolean; counts?: { up: number; down: number; n: number }; onTap: () => void;
+function Card({ icon, title, en, frags, weak, counts, onTap }: {
+  icon: string; title: string; en?: string; frags: Frag[]; weak?: boolean; counts?: { up: number; down: number; n: number }; onTap: () => void;
 }) {
   const mention = counts ? Math.max(0, counts.n - counts.up - counts.down) : 0;
   const total = counts ? counts.up + counts.down + mention : 0;
@@ -149,10 +152,10 @@ function Card({ icon, title, frags, weak, counts, onTap }: {
     <section className="card tap" onClick={onTap}>
       <div className="card-head">
         <span className="tile" aria-hidden>{icon}</span>
-        <h2>{title}</h2>
+        <h2>{title}<En>{en}</En></h2>
         <SpeakButton frags={frags} />
       </div>
-      <p className="sentence">{renderThai(frags)}</p>
+      <p className="sentence">{renderThai(frags)}<En>{renderEnglish(frags)}</En></p>
       {counts && total > 0 && (
         <>
           <div className="likebar" aria-hidden>
@@ -160,14 +163,14 @@ function Card({ icon, title, frags, weak, counts, onTap }: {
             {counts.down > 0 && <i className="down" style={{ flex: counts.down }} />}
             {mention > 0 && <i className="mention" style={{ flex: mention }} />}
           </div>
-          <div className="likebar-legend"><span>👍 ชอบ {counts.up}</span><span>👎 ไม่ชอบ {counts.down}</span>{mention > 0 && <span>💬 พูดถึง {mention}</span>}</div>
+          <div className="likebar-legend"><span>👍 ชอบ {counts.up}<En block={false}> liked</En></span><span>👎 ไม่ชอบ {counts.down}<En block={false}> disliked</En></span>{mention > 0 && <span>💬 พูดถึง {mention}<En block={false}> mentioned</En></span>}</div>
         </>
       )}
       <div className="row" style={{ marginTop: 8 }}>
-        {weak && <span className="badge weak"><AlertTriangle aria-hidden /> {renderThai(T.weakEvidence())}</span>}
+        {weak && <span className="badge weak"><AlertTriangle aria-hidden /> <span>{renderThai(T.weakEvidence())}<En>{renderEnglish(T.weakEvidence())}</En></span></span>}
         <span className="grow" />
         <button className="link small" style={{ fontWeight: 600, textDecoration: 'none' }} onClick={(e) => { e.stopPropagation(); onTap(); }}>
-          ดูความเห็นจริง <ChevronRight aria-hidden />
+          <span>ดูความเห็นจริง<En>See real comments</En></span> <ChevronRight aria-hidden />
         </button>
       </div>
       <DecideFooter />
@@ -183,7 +186,7 @@ function Drawer({ evidence, byId, onChanged }: { evidence: Evidence[]; byId: Map
   if (!items.length) return <p className="muted small">มีแต่คะแนนจากรูปภาพ ไม่มีข้อความ</p>;
   return (
     <div className="drawer">
-      {pack === false && <p className="muted small">ℹ️ ยังไม่ได้ติดตั้งชุดแปลภาษา จึงแสดงข้อความต้นฉบับพร้อมหัวข้อภาษาไทย (ติดตั้งได้ที่ ⚙️ ตั้งค่า)</p>}
+      {pack === false && <p className="muted small">ℹ️ ยังไม่ได้ติดตั้งชุดแปลภาษา จึงแสดงข้อความต้นฉบับพร้อมหัวข้อภาษาไทย (ติดตั้งได้ที่ ⚙️ ตั้งค่า)<En>Translation pack not installed — showing the original text with Thai topic labels.</En></p>}
       {items.map((e) => {
         const f = byId.get(e.feedbackId);
         return f ? <Quote key={f.id} f={f} ev={e} pack={!!pack} onChanged={onChanged} /> : null;
@@ -216,7 +219,7 @@ function Quote({ f, ev, pack, onChanged }: { f: FeedbackRec; ev: Evidence; pack:
       {f.thaiTranslation && <p className="thai">🇹🇭 {f.thaiTranslation} <span className="badge mt">แปลโดยเครื่อง</span></p>}
       {busy && <p className="spinner small">⏳ กำลังแปล…</p>}
       {err && <p className="warn small">แปลไม่สำเร็จ ดูข้อความต้นฉบับแทน</p>}
-      <p className="small">{labels.join(' · ')}</p>
+      <p className="small">{labels.join(' · ')}<En>{(f.humanLabels?.aspects ?? f.model?.aspects ?? []).map((a) => ASPECT_INFO[a.aspect].en + (a.sentiment ? ` (${a.sentiment})` : '')).join(' · ')}</En></p>
     </blockquote>
   );
 }

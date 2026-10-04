@@ -32,20 +32,29 @@ const asp = (aspect: Aspect): Frag => ({ kind: 'aspect', aspect });
 /** Max number that has a recorded clip (spec §16.3: numbers 1–30). */
 export const MAX_NUMBER_CLIP = 30;
 
+/** A template sentence: Thai fragments plus the exact English meaning, used for presenter captions. */
+export type Sentence = Frag[] & { en: string };
+const s = (frags: Frag[], en: string): Sentence => Object.assign(frags, { en });
+const g = (n: number) => `${n} guest${n === 1 ? '' : 's'}`;
+const en = (a: Aspect) => ASPECT_INFO[a].en;
+
 export const T = {
-  liked: (n: number, a: Aspect) => [clip('guests'), num(n), clip('people_liked'), asp(a)],
-  disliked: (n: number, a: Aspect) => [clip('guests'), num(n), clip('people_disliked'), asp(a)],
-  split: (pos: number, neg: number, a: Aspect) => [
+  liked: (n: number, a: Aspect) => s([clip('guests'), num(n), clip('people_liked'), asp(a)], `${g(n)} liked ${en(a)}`),
+  disliked: (n: number, a: Aspect) => s([clip('guests'), num(n), clip('people_disliked'), asp(a)], `${g(n)} disliked ${en(a)}`),
+  split: (pos: number, neg: number, a: Aspect) => s([
     clip('guests'), num(pos), clip('people_liked'), num(neg), clip('people_disliked'), clip('about'), asp(a),
-  ],
-  mentioned: (n: number, a: Aspect) => [clip('guests'), num(n), clip('people_mentioned'), asp(a)],
-  wantToBuy: (n: number) => [clip('guests'), num(n), clip('people_want_to_buy')],
-  suggestions: (n: number) => [clip('guests'), num(n), clip('people_suggested')],
-  unsure: (n: number) => [clip('there_are'), num(n), clip('unsure_items')],
-  weakEvidence: () => [clip('weak_evidence')],
-  footer: () => [clip('footer')],
-  noData: () => [clip('no_data')],
-} satisfies Record<string, (...args: any[]) => Frag[]>;
+  ], `${g(pos)} liked, ${neg} disliked ${en(a)}`),
+  mentioned: (n: number, a: Aspect) => s([clip('guests'), num(n), clip('people_mentioned'), asp(a)], `${g(n)} mentioned ${en(a)}`),
+  wantToBuy: (n: number) => s([clip('guests'), num(n), clip('people_want_to_buy')], `${g(n)} want to buy coffee beans or products`),
+  suggestions: (n: number) => s([clip('guests'), num(n), clip('people_suggested')], `${g(n)} made suggestions`),
+  unsure: (n: number) => s([clip('there_are'), num(n), clip('unsure_items')], `${n} comment${n === 1 ? '' : 's'} the system isn't sure about — ask a person`),
+  weakEvidence: () => s([clip('weak_evidence')], 'Too little data to conclude'),
+  footer: () => s([clip('footer')], 'Suggestions only. You decide.'),
+  noData: () => s([clip('no_data')], 'No guest feedback in this period yet'),
+} satisfies Record<string, (...args: any[]) => Sentence>;
+
+/** English meaning of a template sentence (empty for hand-built fragment lists). */
+export const renderEnglish = (frags: Frag[]) => (frags as Partial<Sentence>).en ?? '';
 
 export function fragText(f: Frag): string {
   if (f.kind === 'clip') return FRAGMENTS[f.id];

@@ -283,3 +283,12 @@ mark.unknown { background: var(--unknown); border-bottom: 2px solid var(--accent
 .spin { animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 .summary .speak { background: rgb(255 255 255 / .14); color: #fff; border-color: transparent; box-shadow: none; width: 44px; height: 44px; min-height: 44px; min-width: 44px; }
+
+/* Presenter captions (English under Thai) */
+.en { color: var(--ink-3); font-size: 13px; font-weight: 400; line-height: 1.35; font-style: italic; letter-spacing: 0; }
+.en.block { display: block; margin-top: 2px; }
+.summary .en, .big.hero .en { color: rgb(255 255 255 / .72); }
+.bottom-nav .en { font-size: 10px; margin: 0; font-style: normal; }
+.caption-toggle { min-height: 44px; padding: 4px 14px; font-weight: 600; font-size: var(--t-s); }
+[role="tab"] .en { color: inherit; font-style: normal; }
+.big .en { font-size: 13px; font-weight: 400; }

@@ -62,7 +62,7 @@ export function Settings() {
 
   return (
     <main className="screen settings">
-      <TopBar title="ตั้งค่า" />
+      <TopBar title="ตั้งค่า" en="Settings" />
       <ReadyCheck />
 
       <section className="card">

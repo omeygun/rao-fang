@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { ArrowRight, Download, Mic, PlaneTakeoff, ShieldCheck, Sparkles, Volume2 } from 'lucide-react';
 import { loadDemo } from '../demo';
+import { setCaptions } from '../components/ui';
 import { go } from '../nav';
 
 type InstallEvent = Event & { prompt: () => Promise<void> };
@@ -29,7 +30,7 @@ export function Landing() {
           keep and what to fix — no internet, no cloud, nothing leaves the phone.
         </p>
         <div className="ctas reveal">
-          <button className="primary" onClick={async () => { await loadDemo(); go('/insights'); }}><Sparkles aria-hidden /> Try the demo</button>
+          <button className="primary" onClick={async () => { await loadDemo(); setCaptions(true); go('/insights'); }}><Sparkles aria-hidden /> Try the demo</button>
           {install
             ? <button onClick={() => install.prompt()}><Download aria-hidden /> Install app</button>
             : <button onClick={() => go('/')}>Open the app</button>}
